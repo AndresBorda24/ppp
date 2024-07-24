@@ -1,0 +1,7 @@
+/vendor
+/dist
+/node_modules
+/.vscode
+/storage
+.env
+.env.prod
