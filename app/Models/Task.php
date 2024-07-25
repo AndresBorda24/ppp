@@ -4,6 +4,7 @@ namespace App\Models;
 use Medoo\Medoo;
 use App\Dto\TaskDto;
 use App\Dto\DetalleDto;
+use App\Dto\TaskFullDto;
 
 class Task
 {
@@ -45,14 +46,11 @@ class Task
 
     public function update(
         int|string $id,
-        TaskDto $taskData,
         DetalleDto $detalleData
     ): bool {
         $error = null;
-        $this->db->action(function() use($id, &$error, $taskData, $detalleData)  {
+        $this->db->action(function() use($id, &$error, $detalleData)  {
             try {
-                // $taskId = $this->updateTask($taskData); // Imprementar
-
                 (new Detalle($this->db))->update(
                     data: $detalleData,
                     id: $id,
@@ -65,8 +63,6 @@ class Task
         });
 
         if ($error !== null) throw $error;
-        if ($id === null) throw new \Exception("No se pudo crear la tarea");
-
         return true;
     }
 
@@ -109,6 +105,28 @@ class Task
         if ($error !== null) throw $error;
 
         return true;
+    }
+
+    /** Obtiene todas las tareas relacionadas con un Projecto */
+    public function getOne(array $where): ?TaskFullDto
+    {
+        $data = $this->db->get(Detalle::TABLE." (D)", [
+            "[>]".self::TABLE." (T)" => [
+                "detail_id" => "id",
+                "AND" => [
+                    "detail_type" => self::TYPE
+                ]
+            ]
+        ], [
+            "T.id", "D.id (detail_id)", "T.project_id",
+            "title", "description", "status", "delegate_id", "created_by_id",
+            "priority", "created_at", "started_at", "updated_at", "finished_at",
+            "detail_type", "detail_id"
+        ], $where);
+
+        return $data
+            ? TaskFullDto::fromArray($data)
+            : null;
     }
 
     /** Obtiene todas las tareas relacionadas con un Projecto */

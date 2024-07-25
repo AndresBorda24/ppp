@@ -24,7 +24,10 @@ return function (App $app) {
         });
 
         $api->group("/tasks", function(Group $tk) {
-
+            $tk->get("/{id:[0-9]+}/get", [TaskController::class, "findOne"]);
+            $tk->post("/{projectId:[0-9]+}/create", [TaskController::class, "create"]);
+            $tk->put("/{id:[0-9]+}/update", [TaskController::class, "update"]);
+            $tk->delete("/{id:[0-9]+}/delete", [TaskController::class, "delete"]);
         });
 
         // $api->get('/attachment/(\d+)/download', 'Api\AdjuntosController@download');
