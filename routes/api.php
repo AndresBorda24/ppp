@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\TaskController;
 use Slim\App;
 use Slim\Routing\RouteCollectorProxy as Group;
 use App\Http\Controllers\Api\ProjectController;
+use App\Http\Controllers\Api\SubtaskController;
 use App\Http\Middleware\JsonBodyParserMiddleware;
 
 /** Rutas Api */
@@ -17,7 +18,6 @@ return function (App $app) {
             $pj->get("/search", [ProjectController::class, "search"]);
             $pj->get("/{id:[0-9]+}/basic", [ProjectController::class, "basic"]);
             $pj->get("/{projectId:[0-9]+}/tasks", [TaskController::class, "getAllForProject"]);
-
             $pj->post("/store", [ProjectController::class, "store"]);
             $pj->put("/{id:[0-9]+}/update", [ProjectController::class, "update"]);
             $pj->delete("/{id:[0-9]+}/delete", [ProjectController::class, "remove"]);
@@ -25,9 +25,18 @@ return function (App $app) {
 
         $api->group("/tasks", function(Group $tk) {
             $tk->get("/{id:[0-9]+}/get", [TaskController::class, "findOne"]);
+            $tk->get("/{taskId:[0-9]+}/subtasks", [SubtaskController::class, "getAllForTask"]);
             $tk->post("/{projectId:[0-9]+}/create", [TaskController::class, "create"]);
             $tk->put("/{id:[0-9]+}/update", [TaskController::class, "update"]);
             $tk->delete("/{id:[0-9]+}/delete", [TaskController::class, "delete"]);
+        });
+
+        $api->group("/subtasks", function(Group $st) {
+            $st->get("/{id:[0-9]+}/get", [SubtaskController::class, "findOne"]);
+            $st->post("/{taskId:[0-9]+}/create", [SubtaskController::class, "create"]);
+            $st->post("/{id:[0-9]+}/to-task", [SubtaskController::class, "toTask"]);
+            $st->put("/{id:[0-9]+}/update", [SubtaskController::class, "update"]);
+            $st->delete("/{id:[0-9]+}/delete", [SubtaskController::class, "delete"]);
         });
 
         // $api->get('/attachment/(\d+)/download', 'Api\AdjuntosController@download');
