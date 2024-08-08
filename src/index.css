@@ -1,0 +1,28 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Ubuntu', sans-serif;
+  font-size: 14px;
+}
+
+.aside-button,
+.aside-project-button,
+.aside-project-container > header,
+.aside-project-container > ul li {
+  padding: 7px 4px;
+  border-radius: 5px;
+}
+.aside-project-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-left: 15px;
+}
+
+.full-project-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px
+}
