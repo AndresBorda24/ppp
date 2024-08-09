@@ -1,5 +1,5 @@
 import { Icon } from '@iconify-icon/react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, Link } from 'react-router-dom'
 import { useState } from 'react'
 
 export default function Aside() {
@@ -40,11 +40,11 @@ function ProjectList({ projects = [null, null, null, null], label }) {
     <div className='aside-project-container'>
       <header className='flex items-center'>
         <span className='flex-1 font-bold'>{label}</span>
-        <button
-          type='button'
+        <Link
+          to='/new-project'
           title='Agregar Proyecto'
           className='flex items-center border border-transparent transition-opacity hover:border-neutral-300 p-1 rounded'
-        > <Icon icon="ion:add-outline" /> </button>
+        > <Icon icon="ion:add-outline" /> </Link>
         <button
           type='button'
           title='Expandir / Contrear Listado'

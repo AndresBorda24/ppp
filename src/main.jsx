@@ -8,6 +8,7 @@ import '@fontsource/ubuntu/500.css';
 import '@fontsource/ubuntu/700.css';
 import './index.css'
 import { ProjectFullList } from './routes/ProjectFullList';
+import CreateProject, { action as createAction } from './routes/CreateProject';
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,11 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <ProjectFullList />
+      },
+      {
+        path: '/new-project',
+        action: createAction,
+        element: <CreateProject />
       }
     ]
   }

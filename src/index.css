@@ -26,3 +26,7 @@ body {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 20px
 }
+
+.form-invalid {
+  @apply bg-red-50 border-red-300 focus:!ring-red-100 focus:!border-red-600;
+}
