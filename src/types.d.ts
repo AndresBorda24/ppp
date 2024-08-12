@@ -7,3 +7,7 @@ export type PaginatedProject = {
     priority: string;
     created_at: string;
 }
+export type PaginationProjects = {
+  data: PaginatedProject[],
+  pagination: Object
+}

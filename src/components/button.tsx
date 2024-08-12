@@ -1,8 +1,4 @@
-import { tv } from 'tailwind-variants';
-/**
- * @typedef {'primary'|'secondary'|'tertiary'} ButtonColor
- * @typedef {'base'|'big'|'small'} ButtonSize
-*/
+import { tv, type VariantProps } from 'tailwind-variants';
 
 const ButtonVariants = tv({
   base: 'focus:ring-4 font-medium focus:outline-none focus:ring transition-colors',
@@ -27,14 +23,13 @@ const ButtonVariants = tv({
   }
 })
 
-/**
- * @param {Object} props
- * @param {ButtonColor} props.color
- * @param {ButtonSize} props.size,
- * @param {Boolean} props.disabled
- * @param {string} props.className
-*/
-export function BaseButton({ color = 'primary', size = 'base', disabled = false, className, ...rest }) {
+type ButtonVariantsType = VariantProps<typeof ButtonVariants>
+interface Props extends ButtonVariantsType { className?: string }
+type ButtonProps = Props & React.ButtonHTMLAttributes<HTMLButtonElement>
+
+export const BaseButton: React.FC<ButtonProps> = (
+  { color = 'primary', size = 'base', disabled = false, className, ...rest }
+) => {
   return (
     <button
       {...rest}

@@ -1,4 +1,5 @@
-export function AppInput({type = 'text', ...props}) {
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {}
+export const AppInput: React.FC<InputProps> = ({type = 'text', ...props}) => {
   return (
     <input
       type={type}
@@ -8,7 +9,7 @@ export function AppInput({type = 'text', ...props}) {
   )
 }
 
-export function AppTextarea({...props}) {
+export const AppTextarea = ({...props}) => {
   return (
     <textarea
       {...props}
@@ -17,8 +18,11 @@ export function AppTextarea({...props}) {
   )
 }
 
-export function AppLabel({ className, ...props}) {
+export const AppLabel: React.FC<{
+  className?: string;
+  children: React.ReactNode
+}> = ({ className, ...props}) => {
   return (
-    <label className={`text-xs block text-neutral-500 ${className}`} {...props} ></label>
+    <label className={`text-xs block text-neutral-500 ${className}`} {...props} />
   )
 }

@@ -1,17 +1,17 @@
 import View from '../components/view'
-import { Form } from 'react-router-dom'
+import { ActionFunctionArgs, Form } from 'react-router-dom'
 import { Icon } from '@iconify-icon/react'
 import { AppInput, AppTextarea, AppLabel } from '../components/forms'
 import { useState } from 'react'
 import { BaseButton } from '../components/button'
 
-export async function action({ request }) {
+export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData()
   console.log({ data: Object.fromEntries(formData) })
   return null
 }
 
-const PRIORITY_LEVELS = {
+const PRIORITY_LEVELS: { [k: string]: { name: string, icon: React.ReactNode } } = {
   low: {
     name: 'Baja',
     icon: <Icon icon="healthicons:low-level" height={20} />
@@ -26,7 +26,7 @@ const PRIORITY_LEVELS = {
   }
 }
 
-export default function CreateProject() {
+const CreateProject: React.FC = () => {
   const [priority, setPriority] = useState(Object.keys(PRIORITY_LEVELS)[1])
 
   return (
@@ -80,3 +80,5 @@ export default function CreateProject() {
     </View>
   )
 }
+
+export default CreateProject

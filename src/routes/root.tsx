@@ -1,4 +1,4 @@
-import Aside from "../components/aside"
+import Aside from "../components/Aside"
 import { Outlet } from "react-router-dom"
 
 export default function Root () {
