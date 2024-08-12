@@ -7,7 +7,7 @@ import '@fontsource/ubuntu/400.css';
 import '@fontsource/ubuntu/500.css';
 import '@fontsource/ubuntu/700.css';
 import './index.css'
-import { ProjectFullList } from './routes/ProjectFullList';
+import { ProjectFullList, loader as ProjectListLoader } from './routes/ProjectFullList.tsx';
 import CreateProject, { action as createAction } from './routes/CreateProject';
 
 const router = createBrowserRouter([
@@ -17,7 +17,8 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <ProjectFullList />
+        loader: ProjectListLoader,
+        element: <ProjectFullList />,
       },
       {
         path: '/new-project',
