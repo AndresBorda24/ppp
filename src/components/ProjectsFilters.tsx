@@ -1,6 +1,6 @@
 import { Form } from "react-router-dom";
 import { Icon } from '@iconify-icon/react';
-import { AppInput, AppLabel } from "../components/forms.tsx";
+import { AppInput, AppLabel, AppSelect } from "../components/forms.tsx";
 import { useState } from "react";
 
 const ORDERS: { [k: string]: { icon: React.ReactNode } } = {
@@ -17,14 +17,15 @@ interface Props {
   title: string;
   status: string;
   order: string;
+  amount: string;
 }
-export const ProjectFilters: React.FC<Props> = ({ title, order: defaultOrder, status: defaultStatus }) => {
+export const ProjectFilters: React.FC<Props> = ({ title, amount, order: defaultOrder, status: defaultStatus }) => {
   const [status, setStatus] = useState(defaultStatus);
   const [order, setOrder] = useState(defaultOrder);
 
   function clearStatus() {
     const checkedStatus = document.querySelector('input[name="status"]:checked');
-    if (checkedStatus) (checkedStatus as HTMLInputElement).value = '';
+    if (checkedStatus) (checkedStatus as HTMLInputElement).checked = false;
     setStatus('')
   }
 
@@ -62,7 +63,7 @@ export const ProjectFilters: React.FC<Props> = ({ title, order: defaultOrder, st
         </div>
 
         <AppLabel>Orden</AppLabel>
-        <div className='bg-neutral-50 flex gap-2 p-2'>
+        <div className='bg-neutral-50 flex gap-2 p-2 mb-3'>
           {
             Object.keys(ORDERS).map((key) => (
               <CheckableLabel key={key} isChecked={(order === key)} className="flex-1" >
@@ -78,6 +79,15 @@ export const ProjectFilters: React.FC<Props> = ({ title, order: defaultOrder, st
             ))
           }
         </div>
+
+        <AppLabel>
+          Items Por Página
+          <AppSelect name="amount" defaultValue={amount}>
+            <option value="10">10</option>
+            <option value="25">25</option>
+            <option value="30">30</option>
+          </AppSelect>
+        </AppLabel>
       </Form>
     </section>
   )
