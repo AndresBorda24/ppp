@@ -1,7 +1,7 @@
 import { Form } from "react-router-dom";
 import { Icon } from '@iconify-icon/react';
 import { AppInput, AppLabel, AppSelect } from "../components/forms.tsx";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const ORDERS: { [k: string]: { icon: React.ReactNode } } = {
   asc: { icon: <Icon icon="tabler:sort-ascending-2-filled" /> },
@@ -20,8 +20,10 @@ interface Props {
   amount: string;
 }
 export const ProjectFilters: React.FC<Props> = ({ title, amount, order: defaultOrder, status: defaultStatus }) => {
-  const [status, setStatus] = useState(defaultStatus);
-  const [order, setOrder] = useState(defaultOrder);
+  const [status, setStatus] = useState(defaultStatus)
+  const [order, setOrder] = useState(defaultOrder)
+  const formularioRef = useRef<HTMLFormElement>(null)
+  const btnToggleRef = useRef<HTMLButtonElement>(null)
 
   function clearStatus() {
     const checkedStatus = document.querySelector('input[name="status"]:checked');
@@ -29,10 +31,39 @@ export const ProjectFilters: React.FC<Props> = ({ title, amount, order: defaultO
     setStatus('')
   }
 
+  function toggleForm() {
+    formularioRef.current?.classList.toggle('hidden')
+  }
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (formularioRef.current?.classList.contains('hidden')) return
+      if (formularioRef.current && !formularioRef.current.contains(e.target as Node)) {
+        const filtersButton = (e.target as HTMLElement).closest('button')
+        // Si da click en el boton de Filtros dejamos que este se encargue.
+        if (btnToggleRef.current == filtersButton) return
+        formularioRef.current.classList.add('hidden')
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside)
+    }
+  }, [])
+
   return (
-    <section className='rounded border p-3'>
-      <h5 className='font-bold text-aso-primary text-lg'>Filtros</h5>
-      <Form>
+    <section>
+      <button
+        ref={btnToggleRef}
+        onClick={toggleForm}
+        className='leading-none p-1 rounded border bg-white mb-2 xl:hidden hover:bg-neutral-50 hover:shadow'
+      ><Icon icon="mdi:filter" /></button>
+      <Form
+        ref={formularioRef}
+        className='bg-white hidden shadow-[rgba(0,_0,_0,_0.2)_0px_60px_40px_-7px] rounded border p-3 absolute right-0 z-50 xl:shadow-none xl:relative xl:!block'
+      >
+        <h5 className='font-bold text-aso-primary text-lg'>Filtros</h5>
         <AppLabel className='mb-3'>
           Título:
           <AppInput type="search" name='title' placeholder='Proyecto Don quijote' defaultValue={title} />
@@ -88,6 +119,11 @@ export const ProjectFilters: React.FC<Props> = ({ title, amount, order: defaultO
             <option value="30">30</option>
           </AppSelect>
         </AppLabel>
+
+        <button
+          className='px-3 py-2 text-neutral-500 text-sm block ml-auto hover:text-neutral-600 hover:underline'
+          type='submit'
+        > Filtrar </button>
       </Form>
     </section>
   )
