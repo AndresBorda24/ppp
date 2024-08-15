@@ -1,4 +1,5 @@
 import View from "../components/view.tsx";
+import { Icon } from '@iconify-icon/react';
 import { appFetch } from '../AppFetch'
 import { useLoaderData } from "react-router-dom";
 import { ProjectFilters } from "../components/ProjectsFilters.tsx";
@@ -63,7 +64,14 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   const description = project.description?.substring(0, 200)
 
   return (
-    <div className='group rounded-lg bg-white border border-dashed border-neutral-200 p-5 hover:bg-neutral-50 transition-colors flex flex-col'>
+    <a
+      href="#"
+      className='group rounded-lg bg-white border border-dashed border-neutral-200 p-5 hover:bg-neutral-50 transition-colors flex flex-col relative'
+    >
+      <Icon
+        icon="lucide:arrow-up-right"
+        className='absolute transition-opacity top-0 right-0 m-2 text-xl text-neutral-600 opacity-0 group-hover:opacity-100'
+      />
       <header>
         <h4 className='font-bold text-aso-secondary'>{project.title}</h4>
       </header>
@@ -75,6 +83,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         <b>{project.created_at}</b>
         <span className='inline-block p-1 rounded-sm bg-amber-100 text-amber-700'>{project.status}</span>
       </footer>
-    </div>
+    </a>
   )
 }
