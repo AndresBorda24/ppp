@@ -4,6 +4,7 @@ import Root from './routes/root'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { ProjectFullList, loader as ProjectListLoader } from './routes/ProjectFullList.tsx'
 import CreateProject, { action as createAction } from './routes/CreateProject.tsx'
+import ProjectView, { loader as ProjectLoader } from './routes/Project.tsx'
 
 import '@fontsource/ubuntu/300.css';
 import '@fontsource/ubuntu/400.css';
@@ -25,6 +26,11 @@ const router = createBrowserRouter([
         path: '/new-project',
         action: createAction,
         element: <CreateProject />
+      },
+      {
+        path: '/p/:slug/ver',
+        loader: ProjectLoader,
+        element: <ProjectView />
       }
     ]
   }

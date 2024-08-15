@@ -140,4 +140,9 @@ class ProjectController
     {
         return new JsonResponse($this->project->remove($id));
     }
+
+    public function find(string $slug): Response
+    {
+        return new JsonResponse($this->project->findBySlug($slug));
+    }
 }

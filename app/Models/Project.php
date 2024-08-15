@@ -302,8 +302,10 @@ class Project
         try {
             return $this->db->get(self::TABLE." (P)", [
                 "[>]".Detalle::TABLE." (D)" => [
-                    "P.id" => "D.detail_id",
-                    "detail_type" => self::TYPE
+                    "P.id" => "detail_id",
+                    'AND' => [
+                        "detail_type" => self::TYPE
+                    ]
                 ]
             ], [
                 "P.id", 'estimated_time', 'due_date', 'slug',
@@ -316,5 +318,3 @@ class Project
         }
     }
 }
-
-

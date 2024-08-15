@@ -17,6 +17,7 @@ return function (App $app) {
             $pj->get("", [ProjectController::class, "index"]);
             $pj->get("/search", [ProjectController::class, "search"]);
             $pj->get("/{id:[0-9]+}/basic", [ProjectController::class, "basic"]);
+            $pj->get("/{slug}/find", [ProjectController::class, "find"]);
             $pj->get("/{projectId:[0-9]+}/tasks", [TaskController::class, "getAllForProject"]);
             $pj->post("/store", [ProjectController::class, "store"]);
             $pj->put("/{id:[0-9]+}/update", [ProjectController::class, "update"]);

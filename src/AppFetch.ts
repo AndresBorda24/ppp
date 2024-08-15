@@ -3,8 +3,8 @@ import axios, { AxiosRequestConfig } from "axios";
 type Method = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
 type FecthConfig = {
     url: string;
-    body: any;
-    settings: AxiosRequestConfig
+    body?: any;
+    settings?: AxiosRequestConfig
 }
 
 const AX = axios.create({
@@ -24,8 +24,14 @@ const METHOD_HANDLERS = {
 };
 
 /** Realiza una solicitud HTTP */
-export async function appFetch<T>(method: Method, { url, body, settings = {} }: FecthConfig) {
-    let error:Object|null = null;
+export async function appFetch<T>(
+    method: Method,
+    { url, body = null, settings = {} }: FecthConfig
+): Promise<{
+    data: T|null,
+    error: unknown
+}> {
+    let error:unknown = null;
     let data:T|null = null;
 
     try {
