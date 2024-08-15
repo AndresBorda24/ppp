@@ -2,6 +2,8 @@ import { Form, useSubmit } from "react-router-dom";
 import { Icon } from '@iconify-icon/react';
 import { AppInput, AppLabel, AppSelect } from "../components/forms.tsx";
 import { useEffect, useRef, useState } from "react";
+import { ProjectPagintaion } from "./ProjectsPagination.tsx";
+import { Pagination } from "../types";
 
 const ORDERS: { [k: string]: { icon: React.ReactNode } } = {
   asc: { icon: <Icon icon="tabler:sort-ascending-2-filled" /> },
@@ -18,11 +20,19 @@ interface Props {
   status: string;
   order: string;
   amount: string;
+  pagination: Pagination
 }
-export const ProjectFilters: React.FC<Props> = ({ title, amount: defaultAmount, order: defaultOrder, status: defaultStatus }) => {
+export const ProjectFilters: React.FC<Props> = ({
+  title,
+  pagination,
+  amount: defaultAmount,
+  order: defaultOrder,
+  status: defaultStatus
+}) => {
   const [status, setStatus] = useState(defaultStatus)
   const [amount, setAmount] = useState(defaultAmount)
   const [order, setOrder] = useState(defaultOrder)
+  const [page, setPage] = useState(pagination.current_page)
   const formularioRef = useRef<HTMLFormElement>(null)
   const btnToggleRef = useRef<HTMLButtonElement>(null)
   const submit = useSubmit()
@@ -37,9 +47,13 @@ export const ProjectFilters: React.FC<Props> = ({ title, amount: defaultAmount, 
     formularioRef.current?.classList.toggle('hidden')
   }
 
+  function handleChangePage(page: number) {
+    setPage(page)
+  }
+
   useEffect(() => submit(formularioRef.current, {
     replace: true
-  }), [status, order, amount])
+  }), [status, order, amount, page])
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -69,6 +83,7 @@ export const ProjectFilters: React.FC<Props> = ({ title, amount: defaultAmount, 
         ref={formularioRef}
         className='bg-white hidden shadow-[rgba(0,_0,_0,_0.2)_0px_60px_40px_-7px] rounded border p-3 absolute right-0 z-50 xl:shadow-none xl:relative xl:!block'
       >
+        <input type="hidden" defaultValue={page} name="page" />
         <h5 className='font-bold text-aso-primary text-lg'>Filtros</h5>
         <AppLabel className='mb-3'>
           Título:
@@ -126,6 +141,11 @@ export const ProjectFilters: React.FC<Props> = ({ title, amount: defaultAmount, 
           </AppSelect>
         </AppLabel>
       </Form>
+      <hr className='mb-4' />
+      <ProjectPagintaion
+        pagination={pagination}
+        onPageChange={handleChangePage}
+      />
     </section>
   )
 }

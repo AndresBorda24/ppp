@@ -49,6 +49,7 @@ export const ProjectFullList: React.FC = () => {
               status={status}
               order={order}
               amount={amount}
+              pagination={data.pagination}
             />
           </aside>
         </div>
