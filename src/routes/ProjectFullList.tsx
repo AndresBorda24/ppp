@@ -68,7 +68,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
       </header>
       <p className='text-neutral-600 text-xs whitespace-break-spaces overflow-hidden relative max-h-16 flex-1'>
         <span className="absolute w-full h-16 inset-0 bg-gradient-to-b from-transparent to-white group-hover:to-neutral-50"></span>
-        {description}
+        {description || 'Sin descripción registrada... 🥑' }
       </p>
       <footer className='flex items-center justify-between text-xs text-neutral-500 mt-1'>
         <b>{project.created_at}</b>

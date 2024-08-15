@@ -1,4 +1,4 @@
-import { Form } from "react-router-dom";
+import { Form, useSubmit } from "react-router-dom";
 import { Icon } from '@iconify-icon/react';
 import { AppInput, AppLabel, AppSelect } from "../components/forms.tsx";
 import { useEffect, useRef, useState } from "react";
@@ -19,11 +19,13 @@ interface Props {
   order: string;
   amount: string;
 }
-export const ProjectFilters: React.FC<Props> = ({ title, amount, order: defaultOrder, status: defaultStatus }) => {
+export const ProjectFilters: React.FC<Props> = ({ title, amount: defaultAmount, order: defaultOrder, status: defaultStatus }) => {
   const [status, setStatus] = useState(defaultStatus)
+  const [amount, setAmount] = useState(defaultAmount)
   const [order, setOrder] = useState(defaultOrder)
   const formularioRef = useRef<HTMLFormElement>(null)
   const btnToggleRef = useRef<HTMLButtonElement>(null)
+  const submit = useSubmit()
 
   function clearStatus() {
     const checkedStatus = document.querySelector('input[name="status"]:checked');
@@ -34,6 +36,10 @@ export const ProjectFilters: React.FC<Props> = ({ title, amount, order: defaultO
   function toggleForm() {
     formularioRef.current?.classList.toggle('hidden')
   }
+
+  useEffect(() => submit(formularioRef.current, {
+    replace: true
+  }), [status, order, amount])
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -113,17 +119,12 @@ export const ProjectFilters: React.FC<Props> = ({ title, amount, order: defaultO
 
         <AppLabel>
           Items Por Página
-          <AppSelect name="amount" defaultValue={amount}>
+          <AppSelect name="amount" defaultValue={amount} onChange={(e) => setAmount(e.target.value)}>
             <option value="10">10</option>
             <option value="25">25</option>
             <option value="30">30</option>
           </AppSelect>
         </AppLabel>
-
-        <button
-          className='px-3 py-2 text-neutral-500 text-sm block ml-auto hover:text-neutral-600 hover:underline'
-          type='submit'
-        > Filtrar </button>
       </Form>
     </section>
   )
