@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import Root from './routes/root'
+import { ErrorPage } from './routes/Error.tsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { ProjectFullList, loader as ProjectListLoader } from './routes/ProjectFullList.tsx'
 import CreateProject, { action as createAction } from './routes/CreateProject.tsx'
@@ -16,21 +17,27 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <Root />,
+    errorElement: <ErrorPage />,
     children: [
       {
-        index: true,
-        loader: ProjectListLoader,
-        element: <ProjectFullList />,
-      },
-      {
-        path: '/new-project',
-        action: createAction,
-        element: <CreateProject />
-      },
-      {
-        path: '/p/:slug/ver',
-        loader: ProjectLoader,
-        element: <ProjectView />
+        errorElement: <ErrorPage />,
+        children: [
+          {
+            index: true,
+            loader: ProjectListLoader,
+            element: <ProjectFullList />,
+          },
+          {
+            path: '/new-project',
+            action: createAction,
+            element: <CreateProject />
+          },
+          {
+            path: '/p/:slug/ver',
+            loader: ProjectLoader,
+            element: <ProjectView />
+          }
+        ]
       }
     ]
   }
