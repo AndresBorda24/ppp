@@ -65,7 +65,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
 
   return (
     <a
-      href="#"
+      href={`p/${project.slug}/ver`}
       className='group rounded-lg bg-white border border-dashed border-neutral-200 p-5 hover:bg-neutral-50 transition-colors flex flex-col relative'
     >
       <Icon
