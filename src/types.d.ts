@@ -4,7 +4,7 @@ export type PaginatedProject = {
     title: string;
     description: string;
     status: string;
-    priority: string;
+    priority: Priority;
     created_at: string;
 }
 
@@ -28,7 +28,7 @@ export interface Details {
   detail_type: string;
   created_at: string;
   created_by_id: number;
-  priority: string;
+  priority: Priority;
   status: string;
   title: string;
   delegate_id?: number;
@@ -44,3 +44,5 @@ export interface Project extends Details {
   id: number;
   slug: string;
 }
+
+export type Priority = 'high'|'normal'|'low'
