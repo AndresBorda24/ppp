@@ -42,7 +42,7 @@ export const AppSelect: React.FC<React.SelectHTMLAttributes<HTMLSelectElement>> 
   return (
     <select
       {...props}
-      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none focus:ring focus:ring-aso-primary/20 focus:border-aso-primary block w-full px-2.5 py-1.5"
+      className={`bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:outline-none focus:ring focus:ring-aso-primary/20 focus:border-aso-primary block w-full px-2.5 py-1.5 ${props.className}`}
     />
   )
 }

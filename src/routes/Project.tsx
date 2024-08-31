@@ -5,6 +5,7 @@ import { appFetch } from "../AppFetch"
 import { useProjectStore } from "../stores/Project"
 import { Project as ProjectType } from "../types"
 import { SelectPriority } from "../components/Priority"
+import { HelperDates } from "../components/HelperDates"
 import { XInput, XTextarea, AppInput } from "../components/forms"
 
 export async function loader({ params }: ActionFunctionArgs) {
@@ -22,12 +23,13 @@ export async function loader({ params }: ActionFunctionArgs) {
 }
 
 const ProjectView: React.FC = () => {
-  const { title, description, started_at, priority, created_at, patchProject } = useProjectStore((state) => ({
+  const { title, description, started_at, priority, created_at, due_date, patchProject } = useProjectStore((state) => ({
     title: state.title,
     description: state.description,
     started_at: state.started_at,
     priority: state.priority,
     created_at: state.created_at,
+    due_date: state.due_date,
     patchProject: state.patchProject
   }))
 
@@ -58,17 +60,41 @@ const ProjectView: React.FC = () => {
         <span className="text-neutral-400 font-bold text-[10px] inline-block pl-1">Prioridad</span>
         <SelectPriority priority={priority} setPriority={(p) => patchProject('priority', p)} className="mb-3"/>
 
-        <span className="text-neutral-400 font-bold text-[10px] inline-block pl-1">Fecha de Inicio</span>
-        <span className="text-neutral-400 text-[10px] inline-block pl-1">(
-          Una vez establecida no se podrá cambiar
-        )</span>
-        {
-          started_at
-            ? <span className="block p-1 capitalize">{ formatDate(started_at) }</span>
-            : ( <AppInput type="date" className="ml-1"/>)
-        }
+        <div className="grid sm:grid-cols-2 gap-2 items-end">
+          <div>
+            <span className="text-neutral-400 font-bold text-[10px] inline-block pl-1">
+              Fecha de Inicio
+              <span className="text-neutral-400 text-[10px] font-normal pl-1">(Una vez establecida no se podrá cambiar)</span>
+            </span>
+            {
+              started_at
+                ? <span className="block p-1 capitalize">{ formatDate(started_at) }</span>
+                : ( <AppInput type="date" className="ml-1"/>)
+            }
+          </div>
+          <div>
+            <span className="text-neutral-400 font-bold text-[10px] inline-block pl-1">Fecha de finalización estimada:</span>
+            <div className="flex gap-1 items-center">
+              <AppInput type="date" className="ml-1" defaultValue={due_date}/>
+              <SelectDateHelper setDate={(d => patchProject('due_date', d))} />
+            </div>
+          </div>
+        </div>
       </section>
     </View>
+  )
+}
+
+interface SelectDateHelperProps { setDate: (d: string) => void }
+const SelectDateHelper: React.FC<SelectDateHelperProps> = ({ setDate }) => {
+  return (
+    <details className="relative">
+      <summary className="list-none h-4 rounded-full bg-neutral-800 text-neutral-300 inline-grid leading-none place-content-center aspect-square cursor-pointer select-none">&bull;</summary>
+      <HelperDates
+        setDate={setDate}
+        className="absolute bg-neutral-50 p-2 rounded shadow-lg bottom-full right-0 border border-neutral-200 outline outline-offset-1 outline-1 outline-neutral-300"
+      />
+    </details>
   )
 }
 
