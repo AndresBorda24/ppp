@@ -14,8 +14,14 @@ export const AppInput: React.FC<InputProps> = ({ className = '', type = 'text', 
 
 interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {}
 export const AppTextarea: React.FC<TextareaProps> = ({ className = '', ...props }) => {
+  const textarea = useRef<HTMLTextAreaElement>(null)
+  useEffect(() => {
+    textarea.current!.style.height = textarea.current!.scrollHeight + 5 + 'px'
+  },[])
+
   return (
     <textarea
+      ref={textarea}
       {...props}
       className={`bg-neutral-50 border border-neutral-300 text-neutral-700 text-sm rounded focus:outline-none focus:ring focus:ring-aso-primary/20 focus:border-aso-primary block w-full px-2.5 py-1.5 ${className}`}
     ></textarea>

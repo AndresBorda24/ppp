@@ -53,7 +53,7 @@ const ProjectView: React.FC = () => {
           rows={10}
           onChange={e => patchProject('description', e.target.value)}
           onBlur={() => console.log('Esto es lo que ocurre en el onBlur')}
-        > <p className="text-neutral-700">{description}</p> </XTextarea>
+        > <p className="text-neutral-700 whitespace-break-spaces">{description}</p> </XTextarea>
 
         <span className="text-neutral-400 font-bold text-[10px] inline-block pl-1">Prioridad</span>
         <SelectPriority priority={priority} setPriority={(p) => patchProject('priority', p)} className="mb-3"/>
