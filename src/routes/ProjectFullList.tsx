@@ -1,7 +1,7 @@
 import View from "../components/view.tsx";
 import { Icon } from '@iconify-icon/react';
 import { appFetch } from '../AppFetch'
-import { useLoaderData } from "react-router-dom";
+import { useLoaderData, Link } from "react-router-dom";
 import { ProjectFilters } from "../components/ProjectsFilters.tsx";
 import { type ActionFunctionArgs } from "react-router-dom";
 import { PaginationProjects, PaginatedProject } from '../types';
@@ -64,8 +64,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   const description = project.description?.substring(0, 200)
 
   return (
-    <a
-      href={`p/${project.slug}/ver`}
+    <Link
+      to={`p/${project.slug}/ver`}
       className='group rounded-lg bg-white border border-dashed border-neutral-200 p-5 hover:bg-neutral-50 transition-colors flex flex-col relative'
     >
       <Icon
@@ -83,6 +83,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
         <b>{project.created_at}</b>
         <span className='inline-block p-1 rounded-sm bg-amber-100 text-amber-700'>{project.status}</span>
       </footer>
-    </a>
+    </Link>
   )
 }
