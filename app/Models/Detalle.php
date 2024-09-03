@@ -120,6 +120,14 @@ class Detalle
     }
 
     /**
+     * Actualiza la informacion de ciertos campos del detalle.
+     */
+    public function patch(array $where, array $data): bool
+    {
+        return (bool) $this->db->update(self::TABLE, $data, $where);
+    }
+
+    /**
      * Returna el listado de los campos del detalle.
     */
     public static function getFields(

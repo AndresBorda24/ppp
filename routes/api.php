@@ -7,6 +7,7 @@ use Slim\App;
 use Slim\Routing\RouteCollectorProxy as Group;
 use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\SubtaskController;
+use App\Http\Middleware\ApiErrorMiddleware;
 use App\Http\Middleware\JsonBodyParserMiddleware;
 
 /** Rutas Api */
@@ -20,6 +21,7 @@ return function (App $app) {
             $pj->get("/{slug}/find", [ProjectController::class, "find"]);
             $pj->get("/{projectId:[0-9]+}/tasks", [TaskController::class, "getAllForProject"]);
             $pj->post("/store", [ProjectController::class, "store"]);
+            $pj->patch("/{id:[0-9]+}/patch", [ProjectController::class, "patch"]);
             $pj->put("/{id:[0-9]+}/update", [ProjectController::class, "update"]);
             $pj->delete("/{id:[0-9]+}/delete", [ProjectController::class, "remove"]);
         });
@@ -113,5 +115,8 @@ return function (App $app) {
 
         // // --------------< Log >--------------
         // $api->get('/get-obs-log', 'Api\ViewActivitiesController@getLog');
-    })->add(JsonBodyParserMiddleware::class);
+    })
+        ->add(ApiErrorMiddleware::class)
+        ->add(JsonBodyParserMiddleware::class)
+    ;
 };

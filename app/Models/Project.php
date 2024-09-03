@@ -317,4 +317,31 @@ class Project
             throw $e;
         }
     }
+    /**
+     * Actuliza la información de ciertos campos del projecto junto con su
+     * detalle.
+     *
+     * @param array $data Contiene la informacion a actualizar. Llave: nombre
+     *                    del campo, Valor: valor.
+     */
+    public function patch(int $id, array $data): bool
+    {
+        $details = new Detalle($this->db);
+        $projectFields = ['due_date', 'estimated_time'];
+
+        foreach ($data as $field => $value) {
+            if (in_array($field, $projectFields)) {
+                $this->db->update(self::TABLE, [
+                    $field => $value
+                ], ['id' => $id]);
+                continue;
+            }
+
+            $details->patch([
+                'detail_type' => self::TYPE,
+                'detail_id'   => $id
+            ], [$field => $value]);
+        }
+        return true;
+    }
 }

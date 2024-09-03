@@ -136,6 +136,19 @@ class ProjectController
         return new JsonResponse($this->project->getBasic($id));
     }
 
+    public function patch(Request $request, int $id, ProjectRequest $PR): Response
+    {
+        $body = $request->getParsedBody();
+        $data = array_intersect_assoc($PR->patch($body), $body);
+        $this->project->patch($id, $data);
+
+        if ($project = $this->project->getBasic($id)) {
+            $project = $this->project->findBySlug($project['slug']);
+        }
+
+        return new JsonResponse($project);
+    }
+
     public function remove(int $id): Response
     {
         return new JsonResponse($this->project->remove($id));
