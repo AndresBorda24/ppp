@@ -141,7 +141,7 @@ export const ProjectFilters: React.FC<Props> = ({
           </AppSelect>
         </AppLabel>
       </Form>
-      <hr className='mb-4' />
+      <hr className='mb-4 mt-2' />
       <ProjectPagintaion
         pagination={pagination}
         onPageChange={handleChangePage}
