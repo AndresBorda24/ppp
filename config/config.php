@@ -3,7 +3,7 @@ return [
     "app" => [
         "name" => $_ENV["APP_NAME"],
         "ver"  => $_ENV["APP_VER"],
-        "base" => $_ENV["APP_PATH"],
+        "base" => $_ENV["APP_BASE"],
         "url"  => $_ENV["APP_URL"],
         "env"  => $_ENV["APP_ENV"]
     ],
@@ -19,13 +19,11 @@ return [
     ],
     "assets" => [
         "templates"   => __DIR__ . "/.." . $_ENV["TEMPLATES"],
-        "entrypoints" => __DIR__ . "/.." . $_ENV["ENTRYPOINTS_PATH"]
     ],
     "session" => [
         'name'       => $_ENV["APP_NAME"] . '_session',
         'secure'     => false,
         'httponly'   => true,
         'samesite'   => 'lax',
-    ],
-    "soportes" => __DIR__ . "/../soportes"
+    ]
 ];

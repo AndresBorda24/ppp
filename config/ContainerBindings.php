@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use Medoo\Medoo;
+use Psr\Container\ContainerInterface;
 use Slim\Views\PhpRenderer;
 
 return [
@@ -9,11 +10,11 @@ return [
         __DIR__ . "/..$_ENV[TEMPLATES]"
     ),
 
-    Medoo::class => fn() => new Medoo([
-        'type' => $_ENV["DB_TYPE"],
-        'host' => $_ENV["DB_HOST"],
-        'database' => $_ENV["DB_NAME"],
-        'username' => $_ENV["DB_USER"],
-        'password' => $_ENV["DB_PASS"],
+    Medoo::class => fn(ContainerInterface $c) => new Medoo([
+        'type' => $c->get('db')['type'],
+        'host' => $c->get('db')['host'],
+        'database' => $c->get('db')['database'],
+        'username' => $c->get('db')['username'],
+        'password' => $c->get('db')['password'],
     ])
 ];
