@@ -8,6 +8,7 @@ import { SelectPriority } from "../components/Priority"
 import { HelperDates } from "../components/HelperDates"
 import { XInput, XTextarea, AppInput } from "../components/forms"
 import { useEffect } from "react"
+import { toast } from "sonner"
 
 export async function loader({ params }: ActionFunctionArgs) {
   const {data, error} = await appFetch<ProjectType>('GET', {
@@ -39,6 +40,20 @@ const ProjectView: React.FC = () => {
     patchProject
   } = useProjectStore((state) => state)
 
+  const setStartedAt = () => {
+    const input = document.querySelector('#project-form [name="started_at"]') as HTMLInputElement
+    const date  = input?.value
+
+    if (! Boolean(date)) {
+      toast.warning("No has establecido una Fecha de Inicio.")
+      input?.focus()
+      return
+    }
+
+    patchProject('started_at', date)
+    updateProjectRequest({id, body: { started_at: date }})
+  }
+
   useEffect(() => {
     updateProjectRequest({id, body: { priority, due_date }})
     const selectDueDate = document.querySelector('#project-form [name="due_date"]')
@@ -47,7 +62,6 @@ const ProjectView: React.FC = () => {
       (selectDueDate as HTMLInputElement).value = due_date
     }
   }, [priority, due_date])
-
 
   return (
     <View title={`Visualizando: ${title}`}>
@@ -81,12 +95,27 @@ const ProjectView: React.FC = () => {
             <div>
               <span className="text-neutral-400 font-bold text-[10px] inline-block pl-1">
                 Fecha de Inicio
-                <span className="text-neutral-400 text-[10px] font-normal pl-1">(Una vez establecida no se podrá cambiar)</span>
+                { !started_at && <span className="text-neutral-400 text-[10px] font-normal pl-1">(Una vez establecida no se podrá cambiar)</span>}
               </span>
               {
                 started_at
                   ? <span className="block p-1 capitalize">{ formatDate(started_at) }</span>
-                  : ( <AppInput type="date" name="started_at" className="ml-1"/>)
+                  : (
+                    <div className="flex gap-1 items-center">
+                      <AppInput
+                        type="date"
+                        name="started_at"
+                        className="ml-1 flex-1"
+                        max={(new Date()).toJSON().substring(0, 10)}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => setStartedAt()}
+                        title="Establecer Fecha de Inicio"
+                        className="text-[.6rem] px-1.5 py-0.5 rounded-md transition-colors duration-150 hover:bg-neutral-200 hover:shadow-lg"
+                      >✔</button>
+                    </div>
+                  )
               }
             </div>
             <div>
