@@ -72,6 +72,30 @@ export const ProjectFilters: React.FC<Props> = ({
     }
   }, [])
 
+  useEffect(() => {
+    const handleShortCut = (e: KeyboardEvent) => {
+      const key = e.key
+
+      switch (key) {
+        case '/':
+          const searchInput = formularioRef.current?.querySelector('[name="title"]') as HTMLInputElement
+          if (key !== '/' || searchInput === document.activeElement) return
+          formularioRef.current?.classList.remove('hidden')
+          searchInput?.focus()
+          break
+
+        case 'Escape':
+          formularioRef.current?.classList.add('hidden')
+          break
+      }
+    }
+
+    document.addEventListener('keyup', handleShortCut)
+    return () => {
+      document.removeEventListener('keyup', handleShortCut)
+    }
+  }, [])
+
   return (
     <section>
       <button
