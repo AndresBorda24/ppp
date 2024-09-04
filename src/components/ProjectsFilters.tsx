@@ -42,6 +42,14 @@ export const ProjectFilters: React.FC<Props> = ({
     if (checkedStatus) (checkedStatus as HTMLInputElement).checked = false;
     setStatus('')
   }
+  const clearTitle = () => {
+    const searchInput = formularioRef.current?.querySelector('[name="title"]') as HTMLInputElement
+    if (! searchInput) return
+    if (searchInput.value === '') return
+
+    searchInput.value = ''
+    submit(formularioRef.current, { replace: true })
+  }
 
   const toggleForm = () => formularioRef.current?.classList.toggle('hidden')
   const handleChangePage = (page: number) => setPage(page)
@@ -113,10 +121,18 @@ export const ProjectFilters: React.FC<Props> = ({
       >
         <input type="hidden" defaultValue={page} name="page" />
         <h5 className='font-bold text-aso-primary text-lg'>Filtros</h5>
-        <AppLabel className='mb-3'>
-          Título:
-          <AppInput type="search" name='title' placeholder='Proyecto Don quijote' defaultValue={title} />
-        </AppLabel>
+        <div className="flex items-center gap-1">
+          <AppLabel className='mb-3 flex-1'>
+            Título:
+            <AppInput type="search" name='title' placeholder='Proyecto Don quijote' defaultValue={title} />
+          </AppLabel>
+          <button
+            type="button"
+            onClick={clearTitle}
+            className='leading-none'
+            title="Limpiar Filtro de Título"
+          > <Icon icon="tdesign:close" /> </button>
+        </div>
 
         <AppLabel>Estado:</AppLabel>
         <div className='bg-neutral-50 flex gap-2 p-2 items-center mb-3'>
