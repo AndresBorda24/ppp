@@ -5,7 +5,7 @@ import { AsideMobile } from "../components/AsideMobile"
 
 export default function Root () {
   return (
-    <div className='h-screen flex'>
+    <div className='h-screen flex flex-col md:flex-row'>
       <Toaster />
       <Aside />
       <Outlet />

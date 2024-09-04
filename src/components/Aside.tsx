@@ -5,7 +5,7 @@ import { AsideProjectList } from './aside/AsideProjectList'
 
 const Aside: React.FC = () => {
   return (
-    <div className='sidebar-container flex flex-col p-3 bg-neutral-100 text-neutral-600 text-sms min-w-[220px] border-r'>
+    <div className='sidebar-container hidden md:flex flex-col p-3 bg-neutral-100 text-neutral-600 text-sms min-w-[220px] border-r'>
       <div className='grid place-items-center'>
         <img
           className='max-h-[30px]'
