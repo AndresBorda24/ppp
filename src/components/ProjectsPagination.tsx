@@ -8,12 +8,7 @@ interface Props {
 
 export const ProjectPagintaion: React.FC<Props> = ({ pagination, onPageChange }) => {
   const { last_page, current_page } = pagination
-  const [currentPage, setCurrentPage] = useState(current_page)
-
-  function handleOnClick(page: number) {
-    setCurrentPage(page)
-    onPageChange(page)
-  }
+  const handleOnClick = (page: number) => onPageChange(page)
 
   return (
     <>
@@ -28,7 +23,7 @@ export const ProjectPagintaion: React.FC<Props> = ({ pagination, onPageChange })
                 type="button"
                 onClick={() => handleOnClick(page)}
                 className={`leading-none p-1 h-6 w-auto rounded-sm aspect-square block ${
-                  (page === currentPage)
+                  (page === current_page)
                     ? 'bg-aso-primary text-white'
                     : 'bg-white text-neutral-500 border hover:bg-neutral-50'
                 }`}

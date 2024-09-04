@@ -50,9 +50,6 @@ class Project
         ?string $order  = "desc"
     ) {
         try {
-            $page = (bool) $page ? $page : 1;
-            $offset = ($page * $amount) - $amount;
-
             $where = [
                 "D.status[~]" => $status,
                 "detail_type" => self::TYPE,
@@ -62,6 +59,14 @@ class Project
             $total = $this->db->count(self::TABLE." (P)", [
                 "[>]".Detalle::TABLE." (D)" => ["id" => "detail_id"]
             ], "D.id",  $where);
+
+            $page = (bool) $page ? $page : 1;
+            $offset = ($page * $amount) - $amount;
+
+            if ($offset > $total) {
+                $page = 1;
+                $offset = 0;
+            }
 
             $data = $this->db->select(self::TABLE." (P)", [
                 "[>]".Detalle::TABLE." (D)" => ["id" => "detail_id"]

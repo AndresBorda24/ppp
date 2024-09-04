@@ -43,13 +43,8 @@ export const ProjectFilters: React.FC<Props> = ({
     setStatus('')
   }
 
-  function toggleForm() {
-    formularioRef.current?.classList.toggle('hidden')
-  }
-
-  function handleChangePage(page: number) {
-    setPage(page)
-  }
+  const toggleForm = () => formularioRef.current?.classList.toggle('hidden')
+  const handleChangePage = (page: number) => setPage(page)
 
   useEffect(() => submit(formularioRef.current, {
     replace: true
@@ -73,12 +68,19 @@ export const ProjectFilters: React.FC<Props> = ({
   }, [])
 
   useEffect(() => {
+    const searchInput = formularioRef.current?.querySelector('[name="title"]') as HTMLInputElement
+
+    const handleEscDown = (e: KeyboardEvent) => {
+      const key = e.key
+      if (key === 'Escape') {
+        e.preventDefault()
+      }
+    }
+
     const handleShortCut = (e: KeyboardEvent) => {
       const key = e.key
-
       switch (key) {
         case '/':
-          const searchInput = formularioRef.current?.querySelector('[name="title"]') as HTMLInputElement
           if (key !== '/' || searchInput === document.activeElement) return
           formularioRef.current?.classList.remove('hidden')
           searchInput?.focus()
@@ -91,8 +93,10 @@ export const ProjectFilters: React.FC<Props> = ({
     }
 
     document.addEventListener('keyup', handleShortCut)
+    searchInput.addEventListener('keydown', handleEscDown)
     return () => {
       document.removeEventListener('keyup', handleShortCut)
+      searchInput.removeEventListener('keydown', handleEscDown)
     }
   }, [])
 
