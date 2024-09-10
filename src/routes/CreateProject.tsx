@@ -5,6 +5,7 @@ import { useState } from 'react'
 import { BaseButton } from '../components/button'
 import { SelectPriority } from '../components/Priority'
 import { Priority } from '../types'
+import { MessiTv } from '../components/MessiTv'
 
 export async function action({ request }: ActionFunctionArgs) {
   const formData = await request.formData()
@@ -17,33 +18,38 @@ const CreateProject: React.FC = () => {
 
   return (
     <View title='Crear Un Nuevo Proyecto'>
-      <Form method='POST' className='max-w-lg'>
-        <AppLabel className='mb-4'>
-          Nombre del Proyecto:
-          <AppInput
-            required
-            id='title'
-            name='title'
-            placeholder='Project Planner'
-          />
-        </AppLabel>
+      <div className='lg:grid grid-cols-2 max-w-4xl'>
+        <Form method='POST' className='max-w-lg'>
+          <AppLabel className='mb-4'>
+            Nombre del Proyecto:
+            <AppInput
+              required
+              id='title'
+              name='title'
+              placeholder='Project Planner'
+            />
+          </AppLabel>
 
-        <AppLabel className='mb-4'>
-          Una breve descripción:
-          <AppTextarea
-            rows={5}
-            required
-            id='description'
-            name='description'
-            placeholder='Un medio en el que se puedan registras otros proyectos...'
-          ></AppTextarea>
-        </AppLabel>
+          <AppLabel className='mb-4'>
+            Una breve descripción:
+            <AppTextarea
+              rows={5}
+              required
+              id='description'
+              name='description'
+              placeholder='Un medio en el que se puedan registras otros proyectos...'
+            ></AppTextarea>
+          </AppLabel>
 
-        <AppLabel>Prioridad</AppLabel>
-        <SelectPriority priority={priority} setPriority={setPriority} className='mb-4' />
+          <AppLabel>Prioridad</AppLabel>
+          <SelectPriority priority={priority} setPriority={setPriority} className='mb-4' />
 
-        <BaseButton color='tertiary' type='submit'>Guardar</BaseButton>
-      </Form>
+          <BaseButton color='tertiary' type='submit'>Guardar</BaseButton>
+        </Form>
+        <div className='hidden lg:flex'>
+          <MessiTv className='m-auto' />
+        </div>
+      </div>
     </View>
   )
 }
