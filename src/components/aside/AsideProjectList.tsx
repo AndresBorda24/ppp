@@ -37,9 +37,6 @@ export const AsideProjectList: React.FC<Props> = ({ projects = [], label }) => {
 interface ProjectItemProps { title: string; }
 const ProjectListItem: React.FC<ProjectItemProps> = ({ title }) => {
   return (
-    <AsideButton role='listitem' title={title}>
-      <Icon icon="ph:book-thin" className='text-blue-700' />
-      <span>{title}</span>
-    </AsideButton>
+    <AsideButton icon='ph:book-thin' label={title} role='listitem' title={title} />
   )
 }

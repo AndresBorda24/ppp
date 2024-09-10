@@ -29,7 +29,7 @@ interface AsideMobileProps extends React.ButtonHTMLAttributes<HTMLButtonElement>
 const AsideMobileButton: React.FC<AsideMobileProps> = ({ label, icon, active = false, ... props }) => {
   return (
     <button {...props} className={`group p-2 flex flex-col items-center text-neutral-800 ${ active && 'font-bold'}`}>
-      <span className={`py-0.5 w-full leading-none rounded-xl ${ active ? 'bg-neutral-200' : 'group-hover:bg-neutral-200 transition-colors duration-200 ' }`}>
+      <span className={`py-0.5 w-full leading-none rounded-xl ${ active ? 'bg-aso-primary/15' : 'group-hover:bg-neutral-200 transition-colors duration-200 ' }`}>
         <Icon icon={icon} className='text-lg' />
       </span>
       <span className="text-xs">{label}</span>
