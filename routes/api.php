@@ -20,6 +20,7 @@ return function (App $app) {
             $pj->get("/{id:[0-9]+}/basic", [ProjectController::class, "basic"]);
             $pj->get("/{slug}/find", [ProjectController::class, "find"]);
             $pj->get("/{projectId:[0-9]+}/tasks", [TaskController::class, "getAllForProject"]);
+            $pj->get("/{projectId:[0-9]+}/tasks-basic", [TaskController::class, "getAllForProjectBasic"]);
             $pj->post("/store", [ProjectController::class, "store"]);
             $pj->patch("/{id:[0-9]+}/patch", [ProjectController::class, "patch"]);
             $pj->put("/{id:[0-9]+}/update", [ProjectController::class, "update"]);

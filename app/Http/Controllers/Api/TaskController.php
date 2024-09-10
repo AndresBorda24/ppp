@@ -22,6 +22,12 @@ class TaskController
         return new JSonResponse($tasks);
     }
 
+    public function getAllForProjectBasic(int $projectId): Response
+    {
+        $tasks = $this->task->getFromProjectField($projectId);
+        return new JSonResponse($tasks);
+    }
+
     public function findOne(int $id): Response
     {
         return new JsonResponse($this->task->getOne(["T.id" => $id]));
