@@ -132,7 +132,7 @@ class Task
     /** Obtiene todas las tareas relacionadas con un Projecto */
     public function getFromProject(int|string $projectId)
     {
-        $this->getFromProjectField($projectId,[
+        return $this->getFromProjectField($projectId,[
             "T.id", "D.id (detail_id)",
             "title", "description", "status", "delegate_id", "created_by_id",
             "priority", "created_at", "started_at", "updated_at", "finished_at",

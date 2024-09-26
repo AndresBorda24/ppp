@@ -3,12 +3,13 @@ import View from "../components/view"
 import { formatDate } from "../utils"
 import { appFetch } from "../AppFetch"
 import { useProjectStore } from "../stores/Project"
-import { Project as ProjectType } from "../types"
+import { Project as ProjectType, Task as TaskType } from "../types"
 import { SelectPriority } from "../components/Priority"
 import { HelperDates } from "../components/HelperDates"
 import { XInput, XTextarea, AppInput } from "../components/forms"
 import { useEffect } from "react"
 import { toast } from "sonner"
+import { TaskList } from "../components/project/Tasks"
 
 export async function loader({ params }: ActionFunctionArgs) {
   const {data, error} = await appFetch<ProjectType>('GET', {
@@ -20,6 +21,13 @@ export async function loader({ params }: ActionFunctionArgs) {
 
   const store = useProjectStore.getState()
   store.rewriteProject(data)
+
+  appFetch<TaskType[]>('GET', {
+    url: `/projects/${data.id}/tasks`
+  }).then(({data, error}) => {
+    store.pushTaks(data ?? [])
+    error && toast.error("Imposible cargar listado de tareas")
+  })
 
   return null
 }
@@ -64,70 +72,77 @@ const ProjectView: React.FC = () => {
   }, [priority, due_date])
 
   return (
-    <View title={`Visualizando: ${title}`}>
-      <section className="max-w-lg">
-        <form onSubmit={(e) => e.preventDefault()} id="project-form">
-          <span className="text-neutral-400 font-bold text-[10px] inline-block pl-1">Fecha de Creación:</span>
-          <span className="block p-1 capitalize">{ formatDate(created_at) }</span>
+    <View>
+      <div className="grid lg:grid-cols-2 max-w-6xl mx-auto gap-4">
+        <section>
+          <form onSubmit={(e) => e.preventDefault()} id="project-form">
+            <span className="text-neutral-400 font-bold text-[10px] inline-block pl-1">Fecha de Creación:</span>
+            <span className="block p-1 capitalize">{ formatDate(created_at) }</span>
 
-          <span className="text-neutral-400 font-bold text-[10px] inline-block pl-1">Título:</span>
-          <XInput
-            type="text"
-            name="title"
-            onChange={e => patchProject('title', e.target.value)}
-            onBlur={() => updateProjectRequest({id, body: { title }})}
-            defaultValue={title}
-          > {title} </XInput>
+            <span className="text-neutral-400 font-bold text-[10px] inline-block pl-1">Título:</span>
+            <XInput
+              type="text"
+              name="title"
+              onChange={e => patchProject('title', e.target.value)}
+              onBlur={() => updateProjectRequest({id, body: { title }})}
+              defaultValue={title}
+            > {title} </XInput>
 
-          <span className="text-neutral-400 font-bold text-[10px] inline-block pl-1">Descripción:</span>
-          <XTextarea
-            name="desciption"
-            defaultValue={description}
-            rows={10}
-            onChange={e => patchProject('description', e.target.value)}
-            onBlur={() => updateProjectRequest({id, body: { description }})}
-          > <p className="text-neutral-700 whitespace-break-spaces">{description}</p> </XTextarea>
+            <span className="text-neutral-400 font-bold text-[10px] inline-block pl-1">Descripción:</span>
+            <XTextarea
+              name="desciption"
+              defaultValue={description}
+              rows={10}
+              onChange={e => patchProject('description', e.target.value)}
+              onBlur={() => updateProjectRequest({id, body: { description }})}
+            > <p className="text-neutral-700 whitespace-break-spaces">{description}</p> </XTextarea>
 
-          <span className="text-neutral-400 font-bold text-[10px] inline-block pl-1">Prioridad</span>
-          <SelectPriority priority={priority} setPriority={(p) => patchProject('priority', p)} className="mb-3"/>
+            <span className="text-neutral-400 font-bold text-[10px] inline-block pl-1">Prioridad</span>
+            <SelectPriority priority={priority} setPriority={(p) => patchProject('priority', p)} className="mb-3"/>
 
-          <div className="grid sm:grid-cols-2 gap-2 items-end">
-            <div>
-              <span className="text-neutral-400 font-bold text-[10px] inline-block pl-1">
-                Fecha de Inicio
-                { !started_at && <span className="text-neutral-400 text-[10px] font-normal pl-1">(Una vez establecida no se podrá cambiar)</span>}
-              </span>
-              {
-                started_at
-                  ? <span className="block p-1 capitalize">{ formatDate(started_at) }</span>
-                  : (
-                    <div className="flex gap-1 items-center">
-                      <AppInput
-                        type="date"
-                        name="started_at"
-                        className="ml-1 flex-1"
-                        max={(new Date()).toJSON().substring(0, 10)}
-                      />
-                      <button
-                        type="button"
-                        onClick={() => setStartedAt()}
-                        title="Establecer Fecha de Inicio"
-                        className="text-[.6rem] px-1.5 py-0.5 rounded-md transition-colors duration-150 hover:bg-neutral-200 hover:shadow-lg"
-                      >✔</button>
-                    </div>
-                  )
-              }
-            </div>
-            <div>
-              <span className="text-neutral-400 font-bold text-[10px] inline-block pl-1">Fecha de finalización estimada:</span>
-              <div className="flex gap-1 items-center">
-                <AppInput type="date" className="ml-1" defaultValue={due_date} name="due_date" />
-                <SelectDateHelper date={due_date || null} setDate={(d => patchProject('due_date', d))} />
+            <div className="grid sm:grid-cols-2 gap-2 items-end">
+              <div>
+                <span className="text-neutral-400 font-bold text-[10px] inline-block pl-1">
+                  Fecha de Inicio
+                  { !started_at && <span className="text-neutral-400 text-[10px] font-normal pl-1">(Una vez establecida no se podrá cambiar)</span>}
+                </span>
+                {
+                  started_at
+                    ? <span className="block p-1 capitalize">{ formatDate(started_at) }</span>
+                    : (
+                      <div className="flex gap-1 items-center">
+                        <AppInput
+                          type="date"
+                          name="started_at"
+                          className="ml-1 flex-1"
+                          max={(new Date()).toJSON().substring(0, 10)}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setStartedAt()}
+                          title="Establecer Fecha de Inicio"
+                          className="text-[.6rem] px-1.5 py-0.5 rounded-md transition-colors duration-150 hover:bg-neutral-200 hover:shadow-lg"
+                        >✔</button>
+                      </div>
+                    )
+                }
+              </div>
+              <div>
+                <span className="text-neutral-400 font-bold text-[10px] inline-block pl-1">Fecha de finalización estimada:</span>
+                <div className="flex gap-1 items-center">
+                  <AppInput type="date" className="ml-1" defaultValue={due_date} name="due_date" />
+                  <SelectDateHelper date={due_date || null} setDate={(d => patchProject('due_date', d))} />
+                </div>
               </div>
             </div>
+          </form>
+        </section>
+        <section className="overflow-auto">
+          <div className="rounded-lg px-4">
+            <TaskList />
           </div>
-        </form>
-      </section>
+        </section>
+      </div>
     </View>
   )
 }

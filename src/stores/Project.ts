@@ -1,13 +1,14 @@
 import { create, StateCreator } from "zustand";
-import { Details, Project } from "../types";
+import { Project, Task } from "../types";
 
 interface ProjectState extends Project {
-    tasks: Details[]
+    tasks: Task[]
 }
 
 interface ProjectSlice extends ProjectState {
     patchProject: (key:  keyof Exclude<ProjectState, 'tasks'>, val: unknown) => void
     rewriteProject: (val: Project) => void
+    pushTaks: (val: Task[]) => void
 }
 
 const initialState: ProjectState = {
@@ -28,7 +29,8 @@ const createProjectSlice: StateCreator<
 > = (set) => ({
     ...initialState,
     patchProject: (key, value) => set(() => ({ [key]: value })),
-    rewriteProject: (newProject) => set(() => newProject)
+    rewriteProject: (newProject) => set(() => newProject),
+    pushTaks: (tasks) => set(() => ({ tasks }))
 })
 
 export const useProjectStore = create<ProjectSlice>()(((...a) => ({
