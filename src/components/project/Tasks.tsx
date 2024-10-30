@@ -71,7 +71,7 @@ export const TaskList: React.FC<TaskListProps> = ({ className = '' }) => {
         (filteredTasks.length === 0)
           ? <span>Aún no hay tareas para este Proyecto.</span>
           : (
-            <div role="list" className={`flex flex-col max-h-[380px] overflow-auto ${className}`}>
+            <div role="list" className={`flex flex-col overflow-auto ${className}`}>
               {
                 filteredTasks.map(task => <TaskItem task={task} key={task.detail_id} />)
               }

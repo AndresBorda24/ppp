@@ -9,7 +9,7 @@ import { HelperDates } from "../components/HelperDates"
 import { XInput, XTextarea, AppInput } from "../components/forms"
 import { useEffect } from "react"
 import { toast } from "sonner"
-import { TaskList } from "../components/project/Tasks"
+import { Tabs } from "../components/project/Tabs"
 
 export async function loader({ params }: ActionFunctionArgs) {
   const {data, error} = await appFetch<ProjectType>('GET', {
@@ -73,8 +73,8 @@ const ProjectView: React.FC = () => {
 
   return (
     <View>
-      <div className="grid lg:grid-cols-2 max-w-6xl mx-auto gap-4">
-        <section>
+      <div className="grid max-w-lg lg:grid-cols-2 lg:max-w-6xl mx-auto gap-4">
+        <section className="pt-12 lg:pt-0">
           <form onSubmit={(e) => e.preventDefault()} id="project-form">
             <span className="text-neutral-400 font-bold text-[10px] inline-block pl-1">Fecha de Creación:</span>
             <span className="block p-1 capitalize">{ formatDate(created_at) }</span>
@@ -137,11 +137,8 @@ const ProjectView: React.FC = () => {
             </div>
           </form>
         </section>
-        <section className="overflow-auto">
-          <div className="rounded-lg px-4">
-            <TaskList />
-          </div>
-        </section>
+
+        <Tabs />
       </div>
     </View>
   )
