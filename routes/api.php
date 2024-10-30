@@ -8,6 +8,7 @@ use Slim\Routing\RouteCollectorProxy as Group;
 use App\Http\Controllers\Api\ProjectController;
 use App\Http\Controllers\Api\SubtaskController;
 use App\Http\Middleware\ApiErrorMiddleware;
+use App\Http\Middleware\CorsMiddleware;
 use App\Http\Middleware\JsonBodyParserMiddleware;
 
 /** Rutas Api */
@@ -42,6 +43,8 @@ return function (App $app) {
             $st->put("/{id:[0-9]+}/update", [SubtaskController::class, "update"]);
             $st->delete("/{id:[0-9]+}/delete", [SubtaskController::class, "delete"]);
         });
+
+        $api->options("/{routes:.+}", fn ($response) => $response);
 
         // $api->get('/attachment/(\d+)/download', 'Api\AdjuntosController@download');
         // $api->get('/project/(\d+)/attachments', 'Api\AdjuntosController@getAttachments');
@@ -119,5 +122,6 @@ return function (App $app) {
     })
         ->add(ApiErrorMiddleware::class)
         ->add(JsonBodyParserMiddleware::class)
+        ->add(CorsMiddleware::class)
     ;
 };
