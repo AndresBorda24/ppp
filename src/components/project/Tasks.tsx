@@ -10,9 +10,17 @@ interface TaskItemProps {
   className?: string
 }
 export const TaskItem: React.FC<TaskItemProps> = ({ task, className = "" }) => {
+  const { patchTask } = useProjectStore()
+  function switchStatus() {
+    task.status = (task.status === 'finished')
+      ? 'process'
+      : 'finished';
+    patchTask(task)
+  }
+
   return (
     <div role="listitem" className={`flex text-neutral-800 gap-2 px-1 pt-2 pb-1 ${className} border-t`}>
-      <span className={`group flex h-4 w-4 flex-shrink-0 rounded-full border cursor-pointer transition-colors duration-150 mt-1 ${(task.status === 'finished')
+      <button onClick={switchStatus} type="button" className={`group flex h-4 w-4 flex-shrink-0 rounded-full border cursor-pointer transition-colors duration-150 mt-1 ${(task.status === 'finished')
         ? 'bg-neutral-500/20 border-neutral-500'
         : 'bg-aso-primary/10 border-aso-primary'
         }`}>
@@ -20,7 +28,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task, className = "" }) => {
           icon="material-symbols:check"
           className="m-auto text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-150"
         />
-      </span>
+      </button>
       {/* Sinceramente no sé porque o como funciona el w-0 pero da el efecto deseado */}
       <div className={`flex flex-col flex-1 max-w-full w-0 gap-1 ${task.status === 'finished' && 'line-through opacity-50'}`}>
         <span className="text-sm">{task.title}</span>
