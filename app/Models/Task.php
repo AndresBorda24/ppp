@@ -160,6 +160,26 @@ class Task
         }
     }
 
+    /**
+     * Actuliza la información de ciertos campos de la tarea
+     *
+     * @param array $data Contiene la informacion a actualizar. Llave: nombre
+     *                    del campo, Valor: valor.
+     */
+    public function patch(int $id, array $data): bool
+    {
+        $details = new Detalle($this->db);
+
+        foreach ($data as $field => $value) {
+            $details->patch([
+                'detail_type' => self::TYPE,
+                'detail_id'   => $id
+            ], [$field => $value]);
+        }
+
+        return true;
+    }
+
     // public function getProgress(): int
     // {
     //     try {

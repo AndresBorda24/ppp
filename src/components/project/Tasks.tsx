@@ -4,6 +4,7 @@ import { useProjectStore } from "../../stores/Project"
 import { Icon } from "@iconify-icon/react"
 import { AppInput } from "../forms"
 import { useDebounce } from "use-debounce"
+import { patchTask as patchTaskRequest } from "../../requests/tasks-requests"
 
 interface TaskItemProps {
   task: TaskType,
@@ -15,7 +16,8 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task, className = "" }) => {
     task.status = (task.status === 'finished')
       ? 'process'
       : 'finished';
-    patchTask(task)
+    patchTask(task);
+    patchTaskRequest({ id: task.detail_id, body: { status: task.status }});
   }
 
   return (

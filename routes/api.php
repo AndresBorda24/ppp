@@ -33,6 +33,7 @@ return function (App $app) {
             $tk->get("/{taskId:[0-9]+}/subtasks", [SubtaskController::class, "getAllForTask"]);
             $tk->post("/{projectId:[0-9]+}/create", [TaskController::class, "create"]);
             $tk->put("/{id:[0-9]+}/update", [TaskController::class, "update"]);
+            $tk->patch("/{id:[0-9]+}/patch", [TaskController::class, "patch"]);
             $tk->delete("/{id:[0-9]+}/delete", [TaskController::class, "delete"]);
         });
 

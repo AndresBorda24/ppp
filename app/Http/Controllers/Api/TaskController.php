@@ -55,4 +55,13 @@ class TaskController
     {
         return new JsonResponse($this->task->remove($id));
     }
+
+    public function patch(Request $request, int $id, DetailRequest $PR): Response
+    {
+        $body = $request->getParsedBody();
+        $data = array_intersect_assoc($PR->patch($body), $body);
+        $this->task->patch($id, $data);
+        $task = $this->task->getOne(["T.id" => $id]);
+        return new JsonResponse($task);
+    }
 }
