@@ -10,7 +10,7 @@ export const Tabs: React.FC = () => {
   useEffect(function() {
     if (!isMd && tab !== 1) {
       setTab(1)
-    } else if (tab === 1) {
+    } else if (isMd) {
       setTab(2)
     }
   }, [isMd]);

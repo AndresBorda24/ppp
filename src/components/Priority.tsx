@@ -22,14 +22,33 @@ interface Props {
   setPriority: (p: Priority) => void
 }
 
-export const SelectPriority: React.FC<Props&{ className?: string }> = ({ priority, setPriority, className = '' }) => {
+export const SelectPriority: React.FC<Props&{ className?: string }> = ({
+  priority,
+  setPriority,
+  className = ''
+}) => {
+  function onKeyUp(e: React.KeyboardEvent, p: Priority) {
+    const { key } = e;
+    if (key === "Enter") {
+      setPriority(p);
+    } else if (key === "ArrowLeft") {
+      // @ts-ignore
+      document.activeElement?.previousElementSibling?.focus();
+    } else if (key === "ArrowRight") {
+      // @ts-ignore
+      document.activeElement?.nextElementSibling?.focus()
+    }
+  }
+
   return (
     <div className={`flex flex-wrap gap-2 border bg-neutral-50 rounded p-2 w-full justify-center ${className}`}>
       {
         Object.entries(PRIORITY_LEVELS).map(([key, value]) => (
           <AppLabel
             key={key}
-            className={`px-3 py-1.5 transition-colors cursor-pointer rounded !flex flex-col flex-1 items-center ${ (priority === key) && 'bg-white shadow font-bold' }`}
+            tabIndex={0}
+            onKeyUp={(e) => onKeyUp(e, key as Priority)}
+            className={`px-3 py-1.5 transition-colors cursor-pointer rounded !flex flex-col flex-1 items-center outline-offset-4 outline-none outline-dashed focus:outline-neutral-200  ${ (priority === key) && 'bg-white shadow font-bold' }`}
           >
             {value.name}
             {value.icon}

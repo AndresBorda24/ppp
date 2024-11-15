@@ -5,12 +5,14 @@ import { Icon } from "@iconify-icon/react"
 import { AppInput } from "../forms"
 import { useDebounce } from "use-debounce"
 import { patchTask as patchTaskRequest } from "../../requests/tasks-requests"
+import { useTaskModalStore } from "../../stores/TaskModal"
 
 interface TaskItemProps {
   task: TaskType,
   className?: string
 }
 export const TaskItem: React.FC<TaskItemProps> = ({ task, className = "" }) => {
+  const { openModal } = useTaskModalStore()
   const { patchTask } = useProjectStore()
   function switchStatus() {
     task.status = (task.status === 'finished')
@@ -33,7 +35,7 @@ export const TaskItem: React.FC<TaskItemProps> = ({ task, className = "" }) => {
       </button>
       {/* Sinceramente no sé porque o como funciona el w-0 pero da el efecto deseado */}
       <div className={`flex flex-col flex-1 max-w-full w-0 gap-1 ${task.status === 'finished' && 'line-through opacity-50'}`}>
-        <span className="text-sm">{task.title}</span>
+        <button type="button" onClick={() => openModal(task)} className="text-sm text-left">{task.title}</button>
         {task.description && (
           <span className="text-xs text-neutral-500 text-nowrap text-ellipsis overflow-hidden">{task.description}</span>
         )}
@@ -49,6 +51,7 @@ export const TaskList: React.FC<TaskListProps> = ({ className = '' }) => {
   const [search, setSearch] = useState('')
   const [debouncedSearch] = useDebounce(search, 300)
   const [filteredTasks, setFilteredTasks] = useState<TaskType[]>([])
+  const { openModal } = useTaskModalStore()
 
   useEffect(() => {
     const x = debouncedSearch.toLowerCase()
@@ -65,11 +68,17 @@ export const TaskList: React.FC<TaskListProps> = ({ className = '' }) => {
   return (
     <div className="w-full relative">
       <header className="mb-2">
-        <h5 className="text-aso-secondary font-bold text-base">Tareas</h5>
-        <button
-          className="absolute top-0 right-0 text-xs text-neutral-400 hover:text-neutral-600"
-          onClick={() => setShowCompleted(!showCompleted)}
-        > { showCompleted ? 'Ocultar' : 'Mostrar' } Completadas </button>
+        <h5 className="text-aso-secondary font-bold text-base mb-1">Tareas</h5>
+        <div className="absolute top-0 right-0 text-xs flex itemx-center gap-2">
+          <button
+            className="px-2 py-0.5 rounded bg-blue-50 text-blue-500 focus-within:outline-1 focus:outline-dotted outline-gray-400 outline-offset-2 hover:shadow-inner flex items-center"
+            onClick={() => openModal()}
+          > <Icon icon="material-symbols-light:add" className="text-base" /> Nueva Tarea</button>
+          <button
+            className="px-2 py-0.5 rounded bg-green-50 text-green-500 focus-within:outline-1 focus:outline-dotted outline-gray-400 outline-offset-2 hover:shadow-inner flex items-center"
+            onClick={() => setShowCompleted(!showCompleted)}
+          > { showCompleted ? 'Ocultar' : 'Mostrar' } Completadas </button>
+        </div>
         <AppInput
           type="search"
           defaultValue={search}

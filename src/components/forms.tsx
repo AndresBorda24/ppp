@@ -31,7 +31,7 @@ export const AppTextarea: React.FC<TextareaProps> = ({ className = '', ...props 
 export const AppLabel: React.FC<{
   className?: string;
   children: React.ReactNode
-}> = ({ className, ...props }) => {
+}&React.LabelHTMLAttributes<HTMLLabelElement>> = ({ className, ...props }) => {
   return (
     <label className={`text-xs block text-neutral-500 ${className}`} {...props} />
   )
@@ -81,6 +81,9 @@ export const XContainer: React.FC<XContainerProps> = ({
     <div
       ref={container}
       onClick={() => setShowInput(true)}
+      onFocus={() => setShowInput(true)}
+      onBlur={() => setShowInput(false)}
+      tabIndex={!showInput ? 0 : -1}
       title={!showInput ? "Da click para modificar." : undefined}
       className={`p-1 rounded border border-transparent ${showInput ? '' : 'hover:border-blue-300'}`}
     >
@@ -107,5 +110,57 @@ export const XTextarea: React.FC<XTextareaProps&withChildren> = ({children, ...p
       mainChildren={<AppTextarea {...props} />}
       children={children}
     />
+  )
+}
+
+interface BasicInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  className?: string
+}
+export const BasicInput: React.FC<BasicInputProps> = ({
+  className = '',
+  placeholder = 'Escribe aquí.',
+  ...props
+}) => {
+  return (
+    <input
+      {...props}
+      placeholder={placeholder}
+      className={`block focus-visible:outline-none ${className}`}
+    />
+  );
+}
+
+interface BasicTextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  className?: string
+}
+export const BasicTextarea: React.FC<BasicTextareaProps> = ({
+  className = '',
+  placeholder = 'Puedes escribir aquí',
+  ...props
+}) => {
+  const textarea = useRef<HTMLTextAreaElement>(null);
+
+  function autoResizeHandler() {
+    if (textarea.current) {
+      textarea.current.style.height = "auto";
+      textarea.current.style.height = textarea.current.scrollHeight + "px";
+    }
+  }
+
+  useEffect(() => {
+    textarea.current?.addEventListener('input', autoResizeHandler);
+    textarea.current?.dispatchEvent(new Event('input', { bubbles: true, cancelable: true }));
+    return () => {
+      textarea.current?.removeEventListener('input', autoResizeHandler);
+    }
+  },[]);
+
+  return (
+    <textarea
+      {...props}
+      ref={textarea}
+      placeholder={placeholder}
+      className={`block focus-visible:outline-none ${className}`}
+    > </textarea>
   )
 }
