@@ -8,6 +8,7 @@ import { TaskItem } from "./TaskList";
 export const TaskModalSubtaskList: React.FC = () => {
   const { task } = useTaskModalStore();
   const [list, setList] = useState<SubTask[]>([])
+  const [finished, setFinished] = useState(0)
 
   if (task.detail_type !== 'task' || !Boolean(task.id)) {
     return null;
@@ -37,8 +38,23 @@ export const TaskModalSubtaskList: React.FC = () => {
     });
   }, [])
 
+  useEffect(() => {
+    const subTasksFinished = list.reduce((acc, i) => {
+      acc += (i.status === 'finished') ? 1 : 0
+      return acc;
+    }, 0);
+    setFinished(subTasksFinished);
+  },[list]);
+
   return (
-    <TaskModalSection title="SubTareas">
+    <TaskModalSection
+      title="SubTareas"
+      topChildren={(
+        <div className="text-xs px-2 text-neutral-500">
+          <span>{finished}</span> / <span>{list.length}</span>
+        </div>
+      )}
+    >
       <div className="flex flex-col space-y-2" role="list">
         {
           list.map(item => (
