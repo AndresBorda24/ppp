@@ -28,7 +28,7 @@ export const TaskUpdateForm: React.FC<Props> = ({ item, patch, onSubmit, onCance
   }
 
   return (
-    <form onSubmit={onFormSubmit} id="task-form" autoComplete="off">
+    <form onSubmit={onFormSubmit} id="task-form" autoComplete="off" className="group focus-within:outline-offset-8 focus-within:outline-dotted focus-within:outline-2 focus-within:rounded-sm focus-within:outline-neutral-300">
       <BasicInput
         required
         type="text"
@@ -55,7 +55,7 @@ export const TaskUpdateForm: React.FC<Props> = ({ item, patch, onSubmit, onCance
         setPriority={(p) => patch('priority', p)}
         className="!border-none py-1 !bg-transparent"
       />
-      <div className="flex justify-end pt-2 mt-3 gap-2">
+      <div className="justify-end pt-2 mt-3 gap-2 hidden group-focus-within:flex">
         {
           onCancel
             ? (<BaseButton
