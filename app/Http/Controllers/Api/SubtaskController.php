@@ -60,4 +60,13 @@ class SubtaskController
     {
         return new JsonResponse($this->subtask->remove($id));
     }
+
+    public function patch(Request $request, int $id, DetailRequest $PR): Response
+    {
+        $body = $request->getParsedBody();
+        $data = array_intersect_assoc($PR->patch($body), $body);
+        $this->subtask->patch($id, $data);
+        $subtask = $this->subtask->getOne(["S.id" => $id]);
+        return new JsonResponse($subtask);
+    }
 }

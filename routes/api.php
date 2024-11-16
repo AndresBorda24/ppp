@@ -42,6 +42,7 @@ return function (App $app) {
             $st->post("/{taskId:[0-9]+}/create", [SubtaskController::class, "create"]);
             $st->post("/{id:[0-9]+}/to-task", [SubtaskController::class, "toTask"]);
             $st->put("/{id:[0-9]+}/update", [SubtaskController::class, "update"]);
+            $st->patch("/{id:[0-9]+}/patch", [SubtaskController::class, "patch"]);
             $st->delete("/{id:[0-9]+}/delete", [SubtaskController::class, "delete"]);
         });
 

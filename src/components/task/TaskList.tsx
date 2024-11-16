@@ -1,21 +1,24 @@
 import { Task as TaskType, SubTask as SubTaskType } from "../../types"
 import { Icon } from "@iconify-icon/react"
-import { patchTask } from "../../requests/tasks-requests"
+import { patchTask, patchSubTask } from "../../requests/tasks-requests"
 
 interface TaskItemProps {
   item: TaskType|SubTaskType,
   className?: string,
+  onUpdated: (item: TaskType|SubTaskType ) => void,
   onClick?: () => void
 }
-export const TaskItem: React.FC<TaskItemProps> = ({ item, className = "", onClick }) => {
+export const TaskItem: React.FC<TaskItemProps> = ({ item, className = "", onClick, onUpdated }) => {
   function switchStatus() {
     item.status = (item.status === 'finished')
       ? 'process'
       : 'finished';
 
-    if (item.detail_type === 'task')  {
-      patchTask({ id: item.id , body: { status: item.status }})
-    }
+    (item.detail_type === 'task')
+      ? patchTask({ id: item.id , body: { status: item.status }})
+      : patchSubTask({ id: item.id , body: { status: item.status }});
+
+    onUpdated(item);
   }
 
   return (

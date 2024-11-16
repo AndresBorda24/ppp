@@ -5,6 +5,10 @@ export function patchTask({ id, body }: {id: number, body: any}) {
   return appFetch<Task>('PATCH', { url: `/tasks/${id}/patch`, body })
 }
 
+export function patchSubTask({ id, body }: {id: number, body: any}) {
+  return appFetch<SubTask>('PATCH', { url: `/subtasks/${id}/patch`, body })
+}
+
 export function updateTask(task: Task) {
   return appFetch<Task>('PUT', {
     url: `/tasks/${task.detail_id}/update`,
