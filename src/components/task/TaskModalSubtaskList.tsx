@@ -6,19 +6,20 @@ import { TaskModalSection } from "./TaskModalSection";
 import { TaskItem } from "./TaskList";
 
 export const TaskModalSubtaskList: React.FC = () => {
-  const { task } = useTaskModalStore();
+  const { task, setPrevTask, openModal } = useTaskModalStore();
   const [list, setList] = useState<SubTask[]>([])
   const [finished, setFinished] = useState(0)
-
-  if (task.detail_type !== 'task' || !Boolean(task.id)) {
-    return null;
-  }
 
   function handleOnItemUpdated(item: SubTask|Task) {
     if (item.detail_type === 'sub_task') {
       const newList = sortList(list.map(i => (i.id === item.id) ? item : i));
       setList(newList);
     }
+  }
+
+  function handleOnItemClick(i: SubTask) {
+    setPrevTask(task);
+    openModal(i);
   }
 
   function sortList(l: SubTask[]) {
@@ -46,6 +47,10 @@ export const TaskModalSubtaskList: React.FC = () => {
     setFinished(subTasksFinished);
   },[list]);
 
+  if (task.detail_type !== 'task' || !Boolean(task.id)) {
+    return null;
+  }
+
   return (
     <TaskModalSection
       title="SubTareas"
@@ -62,6 +67,7 @@ export const TaskModalSubtaskList: React.FC = () => {
               key={item.id}
               item={item}
               onUpdated={handleOnItemUpdated}
+              onClick={() => handleOnItemClick(item)}
             />
           ))
         }

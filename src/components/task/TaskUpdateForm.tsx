@@ -2,6 +2,7 @@ import { SubTask, Task } from "../../types";
 import { BasicInput, BasicTextarea } from "../forms";
 import { SelectPriority } from "../Priority";
 import { BaseButton } from "../button";
+import { useEffect } from "react";
 
 interface Props {
   onSubmit: () => void,
@@ -27,8 +28,24 @@ export const TaskUpdateForm: React.FC<Props> = ({ item, patch, onSubmit, onCance
     onSubmit();
   }
 
+  useEffect(() => {
+    const title = document.getElementById('create-item-title') as HTMLInputElement;
+    const desc  = document.getElementById('create-item-description') as HTMLTextAreaElement;
+    if (title) title.value = item.title;
+    if (desc) {
+      desc.value = item.description ?? '';
+      // Esto es para que el textarea tome el auto adecuado
+      desc.dispatchEvent(new Event('input', { bubbles: true, cancelable: true }));
+    }
+  }, [item.id])
+
   return (
-    <form onSubmit={onFormSubmit} id="task-form" autoComplete="off" className="group focus-within:outline-offset-8 focus-within:outline-dotted focus-within:outline-2 focus-within:rounded-sm focus-within:outline-neutral-300">
+    <form
+      onSubmit={onFormSubmit}
+      id="task-form"
+      autoComplete="off"
+      className="group relative focus-within:outline-offset-8 focus-within:outline-dotted focus-within:outline-2 focus-within:rounded-sm focus-within:outline-neutral-300"
+    >
       <BasicInput
         required
         type="text"
@@ -41,6 +58,7 @@ export const TaskUpdateForm: React.FC<Props> = ({ item, patch, onSubmit, onCance
       />
       <BasicTextarea
         name="item-description"
+        id="create-item-description"
         placeholder="Descripción de la Tarea"
         className="text-sm text-neutral-800 w-full mb-1 resize-none"
         defaultValue={item.description}

@@ -1,6 +1,5 @@
 import { Task as TaskType, SubTask as SubTaskType } from "../../types"
-import { Icon } from "@iconify-icon/react"
-import { patchTask, patchSubTask } from "../../requests/tasks-requests"
+import { UpdateTaskStateButton } from "./UpdateTaskStateButton"
 
 interface TaskItemProps {
   item: TaskType|SubTaskType,
@@ -9,29 +8,12 @@ interface TaskItemProps {
   onClick?: () => void
 }
 export const TaskItem: React.FC<TaskItemProps> = ({ item, className = "", onClick, onUpdated }) => {
-  function switchStatus() {
-    item.status = (item.status === 'finished')
-      ? 'process'
-      : 'finished';
-
-    (item.detail_type === 'task')
-      ? patchTask({ id: item.id , body: { status: item.status }})
-      : patchSubTask({ id: item.id , body: { status: item.status }});
-
-    onUpdated(item);
-  }
-
   return (
     <div role="listitem" className={`flex text-neutral-800 gap-2 px-1 ${className}`}>
-      <button onClick={switchStatus} type="button" className={`group flex h-4 w-4 flex-shrink-0 rounded-full border cursor-pointer transition-colors duration-150 mt-1 ${(item.status === 'finished')
-        ? 'bg-neutral-500/20 border-neutral-500'
-        : 'bg-aso-primary/10 border-aso-primary'
-        }`}>
-        <Icon
-          icon="material-symbols:check"
-          className="m-auto text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-150"
-        />
-      </button>
+      <UpdateTaskStateButton
+        item={item}
+        onUpdated={onUpdated}
+      />
       {/* Sinceramente no sé porque o como funciona el w-0 pero da el efecto deseado */}
       <div className={`flex flex-col flex-1 max-w-full w-0 ${item.status === 'finished' && 'line-through opacity-50'}`}>
         <button type="button" onClick={() => onClick ? onClick() : null} className="text-sm text-left text-neutral-600">{item.title}</button>

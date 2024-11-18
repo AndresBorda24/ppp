@@ -7,6 +7,7 @@ interface ModalSlice {
     subtasks: SubTask[],
     prevTask?: Task
     openModal(task?: Task|SubTask): void
+    setPrevTask(task?: Task): void
     pushSubtasks(subtasks: SubTask[]): void
     closeModal(): void
     patchTask(key: keyof Task, value: unknown): void
@@ -34,8 +35,14 @@ const createTaskModalSlice: StateCreator<
         open: true,
         task: {... task || baseTask }
     })),
+    setPrevTask: (task) => set(() => ({
+        prevTask: task
+    })),
     pushSubtasks: (subtasks: SubTask[]) => set(() => ({ subtasks })),
-    closeModal: () => set(() => ({ open: false })),
+    closeModal: () => set(() => ({
+        open: false,
+        prevTask: undefined
+    })),
     patchTask: (key, value) => set(({ task }) => {
         const newTask = {
             ...task,
