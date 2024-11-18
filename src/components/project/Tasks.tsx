@@ -4,49 +4,12 @@ import { useProjectStore } from "../../stores/Project"
 import { Icon } from "@iconify-icon/react"
 import { AppInput } from "../forms"
 import { useDebounce } from "use-debounce"
-import { patchTask as patchTaskRequest } from "../../requests/tasks-requests"
 import { useTaskModalStore } from "../../stores/TaskModal"
-
-interface TaskItemProps {
-  task: TaskType,
-  className?: string
-}
-export const TaskItem: React.FC<TaskItemProps> = ({ task, className = "" }) => {
-  const { openModal } = useTaskModalStore()
-  const { patchTask } = useProjectStore()
-  function switchStatus() {
-    task.status = (task.status === 'finished')
-      ? 'process'
-      : 'finished';
-    patchTask(task);
-    patchTaskRequest({ id: task.detail_id, body: { status: task.status }});
-  }
-
-  return (
-    <div role="listitem" className={`flex text-neutral-800 gap-2 px-1 pt-2 pb-1 ${className} border-t`}>
-      <button onClick={switchStatus} type="button" className={`group flex h-4 w-4 flex-shrink-0 rounded-full border cursor-pointer transition-colors duration-150 mt-1 ${(task.status === 'finished')
-        ? 'bg-neutral-500/20 border-neutral-500'
-        : 'bg-aso-primary/10 border-aso-primary'
-        }`}>
-        <Icon
-          icon="material-symbols:check"
-          className="m-auto text-xs opacity-0 group-hover:opacity-100 transition-opacity duration-150"
-        />
-      </button>
-      {/* Sinceramente no sé porque o como funciona el w-0 pero da el efecto deseado */}
-      <div className={`flex flex-col flex-1 max-w-full w-0 gap-1 ${task.status === 'finished' && 'line-through opacity-50'}`}>
-        <button type="button" onClick={() => openModal(task)} className="text-sm text-left">{task.title}</button>
-        {task.description && (
-          <span className="text-xs text-neutral-500 text-nowrap text-ellipsis overflow-hidden">{task.description}</span>
-        )}
-      </div>
-    </div>
-  )
-}
+import { TaskItem } from "../task/TaskList"
 
 interface TaskListProps { className?: string }
 export const TaskList: React.FC<TaskListProps> = ({ className = '' }) => {
-  const { tasks } = useProjectStore()
+  const { tasks, patchTask } = useProjectStore()
   const [showCompleted, setShowCompleted] = useState(false)
   const [search, setSearch] = useState('')
   const [debouncedSearch] = useDebounce(search, 300)
@@ -61,7 +24,11 @@ export const TaskList: React.FC<TaskListProps> = ({ className = '' }) => {
         .toLowerCase()
         .concat(t.description?.toLowerCase() ?? '')
         .includes(x)
-      )
+      ).sort((a, b) => {
+        if (a.status === 'finished' && b.status !== 'finished') return 1;
+        if (a.status !== 'finished' && b.status === 'finished') return -1;
+        return 0;
+      });
     setFilteredTasks(newTasks)
   },[debouncedSearch, tasks, showCompleted])
 
@@ -90,9 +57,16 @@ export const TaskList: React.FC<TaskListProps> = ({ className = '' }) => {
         (filteredTasks.length === 0)
           ? <span>Aún no hay tareas para este Proyecto.</span>
           : (
-            <div role="list" className={`flex flex-col overflow-auto ${className}`}>
+            <div role="list" className={`flex flex-col space-y-2 overflow-auto ${className}`}>
               {
-                filteredTasks.map(task => <TaskItem task={task} key={task.detail_id} />)
+                filteredTasks.map(task => (
+                  <TaskItem
+                    item={task}
+                    key={task.detail_id}
+                    onUpdated={(item) => patchTask(item)}
+                    onClick={() => openModal(task)}
+                  />
+                ))
               }
             </div>
           )
