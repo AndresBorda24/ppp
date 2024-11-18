@@ -16,6 +16,7 @@ interface ModalSlice {
 const baseTask: Task = {
     id: 0,
     detail_id: 0,
+    project_id: 0,
     detail_type: 'task',
     created_at: '0000-00-00',
     created_by_id: 0,

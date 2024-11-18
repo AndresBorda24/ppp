@@ -19,3 +19,10 @@ export function updateTask(task: Task) {
 export function getSubTasks(task: Task) {
   return appFetch<SubTask[]>('GET', { url: `/tasks/${task.detail_id}/subtasks` })
 }
+
+export function createTask(task: Task) {
+  return appFetch<Task>('POST', {
+    url: `/tasks/${task.project_id}/create`,
+    body: task
+  })
+}

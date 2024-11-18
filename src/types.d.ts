@@ -52,8 +52,10 @@ export type Status = 'new'|'finished'|'process'|'paused'
 
 export interface Task extends Details {
   id: number;
+  project_id: number;
 }
 
 export interface SubTask extends Details {
   id: number;
+  task_id: number;
 }

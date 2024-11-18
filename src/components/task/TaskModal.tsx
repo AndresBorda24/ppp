@@ -1,25 +1,40 @@
 import { useTaskModalStore } from "../../stores/TaskModal"
 import { TaskUpdateForm } from "./TaskUpdateForm"
 import { TaskCreateForm } from "./TaskCreateForm"
-import { updateTask } from "../../requests/tasks-requests"
+import { createTask, updateTask } from "../../requests/tasks-requests"
 import { useProjectStore } from "../../stores/Project"
 import { TaskModalSubtaskList } from "./TaskModalSubtaskList"
 import { TaskModalFooter } from "./TaskModalFooter"
 import { TaskModalHeader } from "./TaskModalHeader"
+import { Task } from "../../types"
 
 export const TaskModal: React.FC = () => {
-  const { open, closeModal, task, patchTask } = useTaskModalStore()
-  const { patchTask: patchTaskFromList } = useProjectStore()
+  const { open, closeModal, task, patchTask, openModal } = useTaskModalStore()
+  const { patchTask: patchTaskFromList, id: projectId, addNewTask } = useProjectStore()
   if (! open) return;
 
   function onSubmitUpdate() {
     const currentTask = {...task};
-    patchTaskFromList(task);
-    updateTask(task).then((value) => {
-      if (value.error) {
-        patchTaskFromList(currentTask);
-      }
-    });
+    if (task.detail_type === 'task') {
+      patchTaskFromList(task as Task);
+      updateTask(task as Task).then((value) => {
+        if (value.error) {
+          patchTaskFromList(currentTask as Task);
+        }
+      });
+    }
+  }
+
+  function onSubmitCreate() {
+    if (task.detail_type === 'task') {
+      (task as Task).project_id = projectId;
+      createTask(task as Task).then((data) => {
+        if (data.data) {
+          addNewTask(data.data);
+          openModal(data.data);
+        }
+      });
+    }
   }
 
   return (
@@ -30,7 +45,7 @@ export const TaskModal: React.FC = () => {
           {
             Boolean(task.detail_id)
             ? <TaskUpdateForm item={task} onSubmit={() => onSubmitUpdate()} patch={patchTask} />
-            : <TaskCreateForm item={task} onSubmit={() => {}} patch={patchTask} onCancel={closeModal} />
+            : <TaskCreateForm item={task} onSubmit={() => onSubmitCreate()} patch={patchTask} onCancel={closeModal} />
           }
           <TaskModalSubtaskList />
         </div>

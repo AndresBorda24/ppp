@@ -9,7 +9,8 @@ interface ProjectSlice extends ProjectState {
     patchProject: (key:  keyof Exclude<ProjectState, 'tasks'>, val: unknown) => void
     rewriteProject: (val: Project) => void
     pushTaks: (val: Task[]) => void
-    patchTask: (val: Task) => void
+    patchTask: (val: Task) => void,
+    addNewTask: (val: Task) => void
 }
 
 const initialState: ProjectState = {
@@ -40,6 +41,10 @@ const createProjectSlice: StateCreator<
         });
         return { tasks: newTasks };
     }),
+    addNewTask: (task) => set((state) => {
+        const tasks = [...state.tasks, task];
+        return { tasks };
+    })
 })
 
 export const useProjectStore = create<ProjectSlice>()(((...a) => ({
