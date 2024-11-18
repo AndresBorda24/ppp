@@ -31,13 +31,13 @@ export const TaskModalSubtaskList: React.FC = () => {
   }
 
   useEffect(() => {
-    getSubTasks(task).then((value) => {
+    if (Boolean(task.id) && task.detail_type === "task") getSubTasks(task).then((value) => {
       if (!value.error) {
         const orderedList = sortList(value.data ?? []);
         setList(orderedList ?? []);
       }
     });
-  }, [])
+  }, [task.id])
 
   useEffect(() => {
     const subTasksFinished = list.reduce((acc, i) => {
