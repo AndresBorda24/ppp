@@ -18,6 +18,8 @@ export type Pagination = {
   last_page: number
 }
 
+export type DetailType = 'task'|'project'|'sub_task'
+
 export type PaginationProjects = {
   data: PaginatedProject[],
   pagination: Pagination
@@ -25,11 +27,11 @@ export type PaginationProjects = {
 
 export interface Details {
   detail_id: number;
-  detail_type: string;
+  detail_type: DetailType;
   created_at: string;
   created_by_id: number;
   priority: Priority;
-  status: string;
+  status: Status;
   title: string;
   delegate_id?: number;
   description?: string;
@@ -46,3 +48,14 @@ export interface Project extends Details {
 }
 
 export type Priority = 'high'|'normal'|'low'
+export type Status = 'new'|'finished'|'process'|'paused'
+
+export interface Task extends Details {
+  id: number;
+  project_id: number;
+}
+
+export interface SubTask extends Details {
+  id: number;
+  task_id: number;
+}

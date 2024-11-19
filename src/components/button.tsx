@@ -1,9 +1,10 @@
 import { tv, type VariantProps } from 'tailwind-variants';
 
 const ButtonVariants = tv({
-  base: 'focus:ring-4 font-medium focus:outline-none focus:ring transition-colors',
+  base: 'focus:ring-4 focus:outline-none focus:ring transition-colors',
   variants: {
     color: {
+      free: '',
       primary: 'bg-aso-primary hover:bg-aso-secondary focus:ring-aso-primary/40 text-white',
       secondary: 'bg-aso-secondary hover:bg-aso-tertiary focus:ring-aso-secondary/40 text-white',
       tertiary: 'bg-aso-yellow hover:bg-amber-600 focus:ring-amber-300 text-neutral-900'

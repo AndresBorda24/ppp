@@ -17,3 +17,13 @@ export function formatDate(date: Date|string) {
         ? date as string
         : datesFormatter.format(DATE as Date)
 }
+
+/**
+ * Retorna fecha actual.
+ * @returns {string} Fecha actual con el formato aaaa-mm-dd hh:mm:ss
+ */
+export function getCurrentDateTime() {
+  const now = new Date();
+  // Se utiliza CA(nada) por que allá manejan la fecha en el formato: aaaa-mm-dd
+  return now.toLocaleString('en-CA', { hour12: false }).replace(',', '');
+}
