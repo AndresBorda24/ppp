@@ -1,7 +1,7 @@
 import { useTaskModalStore } from "../../stores/TaskModal"
 import { TaskUpdateForm } from "./TaskUpdateForm"
 import { TaskCreateForm } from "./TaskCreateForm"
-import { createSubTask, createTask, updateTask } from "../../requests/tasks-requests"
+import { createSubTask, createTask, updateTask, updateSubTask } from "../../requests/tasks-requests"
 import { useProjectStore } from "../../stores/Project"
 import { TaskModalSubtaskList } from "./TaskModalSubtaskList"
 import { TaskModalFooter } from "./TaskModalFooter"
@@ -14,14 +14,17 @@ export const TaskModal: React.FC = () => {
   if (! open) return;
 
   function onSubmitUpdate() {
-    const currentTask = {...task};
     if (task.detail_type === 'task') {
       patchTaskFromList(task as Task);
       updateTask(task as Task).then((value) => {
         if (value.error) {
-          patchTaskFromList(currentTask as Task);
+          patchTaskFromList(task as Task);
         }
       });
+    }
+
+    if (task.detail_type === 'sub_task') {
+      updateSubTask(task as SubTask);
     }
   }
 

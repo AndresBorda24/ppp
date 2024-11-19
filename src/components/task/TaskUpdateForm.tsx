@@ -26,6 +26,7 @@ export const TaskUpdateForm: React.FC<Props> = ({ item, patch, onSubmit, onCance
     }
 
     onSubmit();
+    (document.activeElement as HTMLElement)?.blur();
   }
 
   useEffect(() => {

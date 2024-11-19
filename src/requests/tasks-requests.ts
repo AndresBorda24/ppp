@@ -16,6 +16,13 @@ export function updateTask(task: Task) {
   })
 }
 
+export function updateSubTask(subtask: SubTask) {
+  return appFetch<SubTask>('PUT', {
+    url: `/subtasks/${subtask.detail_id}/update`,
+    body: subtask
+  })
+}
+
 export function getSubTasks(task: Task) {
   return appFetch<SubTask[]>('GET', { url: `/tasks/${task.detail_id}/subtasks` })
 }
