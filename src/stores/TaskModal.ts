@@ -1,5 +1,6 @@
 import { create, StateCreator } from "zustand";
 import { SubTask, Task } from "../types";
+import { getCurrentDateTime } from "../utils";
 
 interface ModalSlice {
     open: boolean
@@ -13,28 +14,30 @@ interface ModalSlice {
     patchTask(key: keyof Task, value: unknown): void
 }
 
-const baseTask: Task = {
-    id: 0,
-    detail_id: 0,
-    project_id: 0,
-    detail_type: 'task',
-    created_at: '0000-00-00',
-    created_by_id: 0,
-    priority: 'normal',
-    status: 'new',
-    title: '',
-    description: ''
+function getBasicTask(): Task {
+    return {
+        id: 0,
+        detail_id: 0,
+        project_id: 0,
+        detail_type: 'task',
+        created_at: getCurrentDateTime(),
+        created_by_id: 0,
+        priority: 'normal',
+        status: 'new',
+        title: '',
+        description: ''
+    }
 }
 
 const createTaskModalSlice: StateCreator<
     ModalSlice, [], [], ModalSlice
 > = (set) => ({
     open: false,
-    task: {...baseTask},
+    task: getBasicTask(),
     subtasks: [],
     openModal: (task?: Task|SubTask) => set(() => ({
         open: true,
-        task: {... task || baseTask }
+        task: {... task || getBasicTask() }
     })),
     setPrevTask: (task) => set(() => ({
         prevTask: task

@@ -12,13 +12,13 @@ export const TaskModalSubtaskList: React.FC = () => {
 
   function handleOnItemUpdated(item: SubTask|Task) {
     if (item.detail_type === 'sub_task') {
-      const newList = sortList(list.map(i => (i.id === item.id) ? item : i));
+      const newList = sortList(list.map(i => (i.id === item.id) ? item as SubTask : i));
       setList(newList);
     }
   }
 
   function handleOnItemClick(i: SubTask) {
-    setPrevTask(task);
+    setPrevTask(task as Task);
     openModal(i);
   }
 
@@ -31,7 +31,7 @@ export const TaskModalSubtaskList: React.FC = () => {
   }
 
   useEffect(() => {
-    if (Boolean(task.id) && task.detail_type === "task") getSubTasks(task).then((value) => {
+    if (Boolean(task.id) && task.detail_type === "task") getSubTasks(task as Task).then((value) => {
       if (!value.error) {
         const orderedList = sortList(value.data ?? []);
         setList(orderedList ?? []);
