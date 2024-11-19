@@ -4,6 +4,7 @@ import { getSubTasks } from "../../requests/tasks-requests";
 import { SubTask, Task } from "../../types";
 import { TaskModalSection } from "./TaskModalSection";
 import { TaskItem } from "./TaskList";
+import { NewSubTaskButton } from "./NewSubTaskButton";
 
 export const TaskModalSubtaskList: React.FC = () => {
   const { task, setPrevTask, openModal } = useTaskModalStore();
@@ -55,8 +56,11 @@ export const TaskModalSubtaskList: React.FC = () => {
     <TaskModalSection
       title="SubTareas"
       topChildren={(
-        <div className="text-xs px-2 text-neutral-500">
-          <span>{finished}</span> / <span>{list.length}</span>
+        <div className="flex items-center justify-between flex-grow">
+          <div className="text-xs px-2 text-neutral-500">
+            <span>{finished}</span> / <span>{list.length}</span>
+          </div>
+          <NewSubTaskButton  taskId={task.id} />
         </div>
       )}
     >

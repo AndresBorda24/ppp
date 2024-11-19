@@ -26,3 +26,10 @@ export function createTask(task: Task) {
     body: task
   })
 }
+
+export function createSubTask(subtask: SubTask) {
+  return appFetch<SubTask>('POST', {
+    url: `/subtasks/${subtask.task_id}/create`,
+    body: subtask
+  })
+}

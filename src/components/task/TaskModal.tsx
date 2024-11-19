@@ -1,12 +1,12 @@
 import { useTaskModalStore } from "../../stores/TaskModal"
 import { TaskUpdateForm } from "./TaskUpdateForm"
 import { TaskCreateForm } from "./TaskCreateForm"
-import { createTask, updateTask } from "../../requests/tasks-requests"
+import { createSubTask, createTask, updateTask } from "../../requests/tasks-requests"
 import { useProjectStore } from "../../stores/Project"
 import { TaskModalSubtaskList } from "./TaskModalSubtaskList"
 import { TaskModalFooter } from "./TaskModalFooter"
 import { TaskModalHeader } from "./TaskModalHeader"
-import { Task } from "../../types"
+import { SubTask, Task } from "../../types"
 
 export const TaskModal: React.FC = () => {
   const { open, closeModal, task, patchTask, openModal } = useTaskModalStore()
@@ -31,6 +31,14 @@ export const TaskModal: React.FC = () => {
       createTask(task as Task).then((data) => {
         if (data.data) {
           addNewTask(data.data);
+          openModal(data.data);
+        }
+      });
+    }
+
+    if (task.detail_type === 'sub_task') {
+      createSubTask(task as SubTask).then((data) => {
+        if (data.data) {
           openModal(data.data);
         }
       });
