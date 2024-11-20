@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\Api\ObservationController;
 use App\Http\Controllers\Api\TaskController;
 use Slim\App;
 use Slim\Routing\RouteCollectorProxy as Group;
@@ -26,6 +27,8 @@ return function (App $app) {
             $pj->patch("/{id:[0-9]+}/patch", [ProjectController::class, "patch"]);
             $pj->put("/{id:[0-9]+}/update", [ProjectController::class, "update"]);
             $pj->delete("/{id:[0-9]+}/delete", [ProjectController::class, "remove"]);
+
+            $pj->get("/{projectId:[0-9+]}/observations", [ObservationController::class, 'loadProjectObs']);
         });
 
         $api->group("/tasks", function(Group $tk) {
