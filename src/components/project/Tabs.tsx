@@ -20,6 +20,7 @@ export const Tabs: React.FC = () => {
       <div className="mx-4 my-2 rounded-full px-8 flex justify-center items-center bg-neutral-100 gap-4 shadow sticky top-2 z-10">
         {!isMd && <TabButton active={tab === 1} onClick={() => setTab(1)} label='Info' icon='ph:books-fill' />}
         <TabButton active={tab === 2} onClick={() => setTab(2)} label='Tareas' icon='mingcute:task-2-fill' />
+        <TabButton active={tab === 3} onClick={() => setTab(3)} label='Obs' icon='mdi:comment-multiple' />
       </div>
 
       <div className={`${tab > 1 ? 'py-4 px-6 sm:px-0 max-w-lg m-auto' : '' }`}>
