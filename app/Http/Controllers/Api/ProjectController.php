@@ -30,7 +30,7 @@ class ProjectController
             "page"   => 1,
             "amount" => 10,
             "status" => "",
-            "order"  => [ "d.id", "desc" ],
+            "order"  => [ "D.id", "desc" ],
             "title"  => ""
         ];
 
