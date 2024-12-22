@@ -28,7 +28,7 @@ return function (App $app) {
             $pj->put("/{id:[0-9]+}/update", [ProjectController::class, "update"]);
             $pj->delete("/{id:[0-9]+}/delete", [ProjectController::class, "remove"]);
 
-            $pj->get("/{projectId:[0-9+]}/observations", [ObservationController::class, 'loadProjectObs']);
+            $pj->get("/{projectId:[0-9]+}/observations", [ObservationController::class, 'loadProjectObs']);
         });
 
         $api->group("/tasks", function(Group $tk) {

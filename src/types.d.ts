@@ -59,3 +59,16 @@ export interface SubTask extends Details {
   id: number;
   task_id: number;
 }
+
+export interface Comment {
+  id: number,
+  body: string,
+  author_id: number,
+  created_at: string,
+  obs_type: DetailType,
+  obs_id: number
+}
+
+export interface CommentWithTitle extends Comment {
+  title: string
+}

@@ -3,7 +3,7 @@ import View from "../components/view";
 import { formatDate } from "../utils";
 import { appFetch } from "../AppFetch";
 import { useProjectStore } from "../stores/Project";
-import { Project as ProjectType, Task as TaskType } from "../types";
+import { CommentWithTitle, Project as ProjectType, Task as TaskType } from "../types";
 import { SelectPriority } from "../components/Priority";
 import { HelperDates } from "../components/HelperDates";
 import { XInput, XTextarea, AppInput } from "../components/forms";
@@ -28,6 +28,13 @@ export async function loader({ params }: ActionFunctionArgs) {
   }).then(({ data, error }) => {
     store.pushTaks(data ?? []);
     error && toast.error("Imposible cargar listado de tareas");
+  });
+
+  appFetch<CommentWithTitle[]>("GET", {
+    url: `/projects/${data.id}/observations`,
+  }).then(({ data, error }) => {
+    store.pushComments(data ?? []);
+    error && toast.error("Imposible cargar listado de Comentarios");
   });
 
   return null;
@@ -78,7 +85,7 @@ const ProjectView: React.FC = () => {
 
   return (
     <View>
-      <div className="grid max-w-lg lg:grid-cols-2 lg:max-w-6xl mx-auto gap-4">
+      <div className="grid max-w-lg lg:grid-cols-2 lg:max-w-6xl mx-auto gap-4 h-full">
         <section className="pt-12 lg:pt-0">
           <form onSubmit={(e) => e.preventDefault()} id="project-form">
             <span className="text-neutral-400 font-bold text-[10px] inline-block pl-1">

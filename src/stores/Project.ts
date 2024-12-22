@@ -1,13 +1,16 @@
 import { create, StateCreator } from "zustand";
-import { Project, Task } from "../types";
+import { Project, Task, Comment, CommentWithTitle } from "../types";
 
 interface ProjectState extends Project {
-    tasks: Task[]
+    tasks: Task[];
+    comments: CommentWithTitle[]
 }
 
 interface ProjectSlice extends ProjectState {
     patchProject: (key:  keyof Exclude<ProjectState, 'tasks'>, val: unknown) => void
     rewriteProject: (val: Project) => void
+    pushComments: (val: CommentWithTitle[]) => void
+    addNewComment: (val: CommentWithTitle) => void
     pushTaks: (val: Task[]) => void
     patchTask: (val: Task) => void,
     addNewTask: (val: Task) => void
@@ -23,7 +26,8 @@ const initialState: ProjectState = {
     priority: 'high',
     status: 'new',
     title: '',
-    tasks: []
+    tasks: [],
+    comments: []
 }
 
 const createProjectSlice: StateCreator<
@@ -44,6 +48,11 @@ const createProjectSlice: StateCreator<
     addNewTask: (task) => set((state) => {
         const tasks = [...state.tasks, task];
         return { tasks };
+    }),
+    pushComments: (comments) => set(() => ({ comments })),
+    addNewComment: (comment) => set((state) => {
+        const comments = [...state.comments, comment];
+        return { comments };
     })
 })
 

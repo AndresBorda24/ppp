@@ -2,6 +2,7 @@ import { Icon } from '@iconify-icon/react'
 import { useEffect, useState } from 'react';
 import { TaskList } from './Tasks';
 import { useBreakpoint } from '../../hooks/breakpoints';
+import { Comments } from './Comments';
 
 export const Tabs: React.FC = () => {
   const [tab, setTab] = useState(1);
@@ -16,15 +17,16 @@ export const Tabs: React.FC = () => {
   }, [isMd]);
 
   return (
-    <div className={`fixed md:w-[calc(100%-72px)] lg:w-full lg:static top-0 right-0 w-full z-10 ${tab > 1 ? 'bg-white h-[calc(100%-63px)] md:h-full lg:h-auto overflow-auto': 'bg-transparent'}`}>
+    <div className={`flex flex-col fixed md:w-[calc(100%-72px)] lg:w-full lg:static top-0 right-0 w-full z-10 ${tab > 1 ? 'bg-white h-[calc(100%-63px)] md:h-full lg:h-auto overflow-auto': 'bg-transparent'}`}>
       <div className="mx-4 my-2 rounded-full px-8 flex justify-center items-center bg-neutral-100 gap-4 shadow sticky top-2 z-10">
         {!isMd && <TabButton active={tab === 1} onClick={() => setTab(1)} label='Info' icon='ph:books-fill' />}
         <TabButton active={tab === 2} onClick={() => setTab(2)} label='Tareas' icon='mingcute:task-2-fill' />
         <TabButton active={tab === 3} onClick={() => setTab(3)} label='Obs' icon='mdi:comment-multiple' />
       </div>
 
-      <div className={`${tab > 1 ? 'py-4 px-6 sm:px-0 max-w-lg m-auto' : '' }`}>
+      <div className={`flex-1 tiny-scrollbar overflow-auto ${tab > 1 ? 'py-4 px-6 sm:px-2 max-w-lg mx-auto w-full' : '' }`}>
         {(tab === 2) && <TaskList /> }
+        {(tab === 3) && <Comments /> }
       </div>
     </div>
   );
