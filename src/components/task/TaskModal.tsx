@@ -7,10 +7,12 @@ import { TaskModalSubtaskList } from "./TaskModalSubtaskList"
 import { TaskModalFooter } from "./TaskModalFooter"
 import { TaskModalHeader } from "./TaskModalHeader"
 import { SubTask, Task } from "../../types"
+import { TaskModalMobileComments } from "./TaskModalMobileComments"
 
 export const TaskModal: React.FC = () => {
   const { open, closeModal, task, patchTask, openModal } = useTaskModalStore()
   const { patchTask: patchTaskFromList, id: projectId, addNewTask } = useProjectStore()
+
   if (! open) return;
 
   function onSubmitUpdate() {
@@ -59,6 +61,7 @@ export const TaskModal: React.FC = () => {
             : <TaskCreateForm item={task} onSubmit={() => onSubmitCreate()} patch={patchTask} onCancel={closeModal} />
           }
           <TaskModalSubtaskList />
+          <TaskModalMobileComments />
         </div>
         <TaskModalFooter item={task} />
       </div>

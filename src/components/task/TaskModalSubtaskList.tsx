@@ -60,7 +60,7 @@ export const TaskModalSubtaskList: React.FC = () => {
           <div className="text-xs px-2 text-neutral-500">
             <span>{finished}</span> / <span>{list.length}</span>
           </div>
-          <NewSubTaskButton  taskId={task.id} />
+          <NewSubTaskButton taskId={task.id} />
         </div>
       )}
     >
