@@ -4,9 +4,10 @@ import { CommentItem } from "../comments/CommentItem";
 import { useDebounce } from "use-debounce";
 import { CommentWithTitle } from "../../types";
 import { AppInput } from "../forms";
+import { NewComment } from "../comments/NewComment";
 
 export const Comments: React.FC = () => {
-  const { comments } = useProjectStore();
+  const { comments, id } = useProjectStore();
   const [search, setSearch] = useState("");
   const [debouncedSearch] = useDebounce(search, 300);
   const [filteredComments, setFilteredComments] = useState<CommentWithTitle[]>(
@@ -45,6 +46,11 @@ export const Comments: React.FC = () => {
           placeholder="Buscar comentarios"
         />
       </header>
+
+      <div className="mb-4">
+        <NewComment type="project" id={id} />
+      </div>
+
       {filteredComments.length === 0 ? (
         <span>Aún no hay comentarios para este Proyecto.</span>
       ) : (

@@ -7,7 +7,8 @@ const ButtonVariants = tv({
       free: '',
       primary: 'bg-aso-primary hover:bg-aso-secondary focus:ring-aso-primary/40 text-white',
       secondary: 'bg-aso-secondary hover:bg-aso-tertiary focus:ring-aso-secondary/40 text-white',
-      tertiary: 'bg-aso-yellow hover:bg-amber-600 focus:ring-amber-300 text-neutral-900'
+      tertiary: 'bg-aso-yellow hover:bg-amber-600 focus:ring-amber-300 text-neutral-900',
+      red: 'bg-red-600 hover:bg-red-700 focus:ring-red-300 text-neutral-50'
     },
     size: {
       base: 'text-sm px-4 py-1.5 rounded-lg',
