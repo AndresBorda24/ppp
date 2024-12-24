@@ -49,6 +49,10 @@ return function (App $app) {
             $st->delete("/{id:[0-9]+}/delete", [SubtaskController::class, "delete"]);
         });
 
+        $api->group("/comments", function(Group $cm) {
+            $cm->post("/create", [ObservationController::class, "createComment"]);
+        });
+
         $api->options("/{routes:.+}", fn ($response) => $response);
 
         // $api->get('/attachment/(\d+)/download', 'Api\AdjuntosController@download');

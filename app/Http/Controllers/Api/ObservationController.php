@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Dto\ObservacionDto;
+use App\Dto\CommentDto;
 use App\Http\Requests\ObservationRequest;
 use App\Models\Observation;
 use Laminas\Diactoros\Response\JsonResponse;
@@ -23,22 +23,14 @@ class ObservationController
         return new JsonResponse($obs);
     }
 
-    public function addProjectObservation(
-        Request $request,
-        ObservationRequest $r,
-        int $projectId
-    ): Response {
+    public function createComment(Request $request, ObservationRequest $r): Response
+    {
         $body = $request->getParsedBody();
-        $data = $r->create($body);
+        $validatedData = $r->create($body);
 
-        $obs = new ObservacionDto(
-            body: $data['body'],
-            created_at: '',
-            obs_id: $projectId,
-            obs_type: \App\Models\Project::TYPE,
-            author_id: 0
-        );
+        $comment = CommentDto::fromArray($validatedData);
+        $comment = $this->obs->create($comment);
 
-        return new JsonResponse([]);
+        return new JsonResponse($comment);
     }
 }
