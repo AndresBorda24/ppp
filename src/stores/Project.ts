@@ -51,7 +51,7 @@ const createProjectSlice: StateCreator<
     }),
     pushComments: (comments) => set(() => ({ comments })),
     addNewComment: (comment) => set((state) => {
-        const comments = [...state.comments, comment];
+        const comments = [comment, ...state.comments];
         return { comments };
     })
 })

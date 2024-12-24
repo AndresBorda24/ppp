@@ -66,7 +66,8 @@ export interface Comment {
   author_id: number,
   created_at: string,
   obs_type: DetailType,
-  obs_id: number
+  obs_id: number,
+  project_id: number
 }
 
 export interface CommentWithTitle extends Comment {
