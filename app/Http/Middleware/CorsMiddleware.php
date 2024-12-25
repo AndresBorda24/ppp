@@ -18,7 +18,8 @@ class CorsMiddleware implements MiddlewareInterface
         $appEnv = $container->get('app')['env'] ?? 'dev';
         $this->allowedOrigins = match ($appEnv) {
             'dev' => [
-                "http://localhost:5173"
+                "http://localhost:5173",
+                "http://192.168.0.8:5173"
             ],
             default => []
         };
