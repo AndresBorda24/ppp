@@ -71,11 +71,12 @@ export const NewComment: React.FC<Props> = ({ type, id, className = "" }) => {
         <div className="border border-dashed border-neutral-300 rounded p-3">
           <form onSubmit={onSubmit}>
             <BasicTextarea
+              autoFocus
               required
               minLength={1}
               name="new-comment-textarea"
               placeholder="Comentar"
-              className="text-sm text-neutral-800 w-full mb-1 resize-none"
+              className="text-sm text-neutral-800 w-full mb-1 resize-none !bg-transparent"
             />
             <div className="flex justify-end items-center gap-4">
               <BaseButton
