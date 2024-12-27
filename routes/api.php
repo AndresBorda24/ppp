@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ObservationController;
 use App\Http\Controllers\Api\TaskController;
 use Slim\App;
@@ -15,45 +16,51 @@ use App\Http\Middleware\JsonBodyParserMiddleware;
 /** Rutas Api */
 return function (App $app) {
     $app->group("/api", function (Group $api) {
-        // --------------< Proyectos >--------------
-        $api->group("/projects", function(Group $pj) {
-            $pj->get("", [ProjectController::class, "index"]);
-            $pj->get("/search", [ProjectController::class, "search"]);
-            $pj->get("/{id:[0-9]+}/basic", [ProjectController::class, "basic"]);
-            $pj->get("/{slug}/find", [ProjectController::class, "find"]);
-            $pj->get("/{projectId:[0-9]+}/tasks", [TaskController::class, "getAllForProject"]);
-            $pj->get("/{projectId:[0-9]+}/tasks-basic", [TaskController::class, "getAllForProjectBasic"]);
-            $pj->post("/store", [ProjectController::class, "store"]);
-            $pj->patch("/{id:[0-9]+}/patch", [ProjectController::class, "patch"]);
-            $pj->put("/{id:[0-9]+}/update", [ProjectController::class, "update"]);
-            $pj->delete("/{id:[0-9]+}/delete", [ProjectController::class, "remove"]);
+        $api->post("/login", [AuthController::class, "login"]);
 
-            $pj->get("/{projectId:[0-9]+}/observations", [ObservationController::class, 'loadProjectObs']);
-        });
+        $api->group("", function (Group $api) {
+            // --------------< Proyectos >--------------
+            $api->group("/projects", function (Group $pj) {
+                $pj->get("", [ProjectController::class, "index"]);
+                $pj->get("/search", [ProjectController::class, "search"]);
+                $pj->get("/{id:[0-9]+}/basic", [ProjectController::class, "basic"]);
+                $pj->get("/{slug}/find", [ProjectController::class, "find"]);
+                $pj->get("/{projectId:[0-9]+}/tasks", [TaskController::class, "getAllForProject"]);
+                $pj->get("/{projectId:[0-9]+}/tasks-basic", [TaskController::class, "getAllForProjectBasic"]);
+                $pj->post("/store", [ProjectController::class, "store"]);
+                $pj->patch("/{id:[0-9]+}/patch", [ProjectController::class, "patch"]);
+                $pj->put("/{id:[0-9]+}/update", [ProjectController::class, "update"]);
+                $pj->delete("/{id:[0-9]+}/delete", [ProjectController::class, "remove"]);
 
-        $api->group("/tasks", function(Group $tk) {
-            $tk->get("/{id:[0-9]+}/get", [TaskController::class, "findOne"]);
-            $tk->get("/{taskId:[0-9]+}/subtasks", [SubtaskController::class, "getAllForTask"]);
-            $tk->post("/{projectId:[0-9]+}/create", [TaskController::class, "create"]);
-            $tk->put("/{id:[0-9]+}/update", [TaskController::class, "update"]);
-            $tk->patch("/{id:[0-9]+}/patch", [TaskController::class, "patch"]);
-            $tk->delete("/{id:[0-9]+}/delete", [TaskController::class, "delete"]);
-        });
+                $pj->get("/{projectId:[0-9]+}/observations", [ObservationController::class, 'loadProjectObs']);
+            });
 
-        $api->group("/subtasks", function(Group $st) {
-            $st->get("/{id:[0-9]+}/get", [SubtaskController::class, "findOne"]);
-            $st->post("/{taskId:[0-9]+}/create", [SubtaskController::class, "create"]);
-            $st->post("/{id:[0-9]+}/to-task", [SubtaskController::class, "toTask"]);
-            $st->put("/{id:[0-9]+}/update", [SubtaskController::class, "update"]);
-            $st->patch("/{id:[0-9]+}/patch", [SubtaskController::class, "patch"]);
-            $st->delete("/{id:[0-9]+}/delete", [SubtaskController::class, "delete"]);
-        });
+            $api->group("/tasks", function (Group $tk) {
+                $tk->get("/{id:[0-9]+}/get", [TaskController::class, "findOne"]);
+                $tk->get("/{taskId:[0-9]+}/subtasks", [SubtaskController::class, "getAllForTask"]);
+                $tk->post("/{projectId:[0-9]+}/create", [TaskController::class, "create"]);
+                $tk->put("/{id:[0-9]+}/update", [TaskController::class, "update"]);
+                $tk->patch("/{id:[0-9]+}/patch", [TaskController::class, "patch"]);
+                $tk->delete("/{id:[0-9]+}/delete", [TaskController::class, "delete"]);
+            });
 
-        $api->group("/comments", function(Group $cm) {
-            $cm->post("/create", [ObservationController::class, "createComment"]);
-        });
+            $api->group("/subtasks", function (Group $st) {
+                $st->get("/{id:[0-9]+}/get", [SubtaskController::class, "findOne"]);
+                $st->post("/{taskId:[0-9]+}/create", [SubtaskController::class, "create"]);
+                $st->post("/{id:[0-9]+}/to-task", [SubtaskController::class, "toTask"]);
+                $st->put("/{id:[0-9]+}/update", [SubtaskController::class, "update"]);
+                $st->patch("/{id:[0-9]+}/patch", [SubtaskController::class, "patch"]);
+                $st->delete("/{id:[0-9]+}/delete", [SubtaskController::class, "delete"]);
+            });
 
-        $api->options("/{routes:.+}", fn ($response) => $response);
+            $api->group("/comments", function (Group $cm) {
+                $cm->post("/create", [ObservationController::class, "createComment"]);
+            });
+        })
+            ->add(\App\Http\Middleware\AuthMiddleware::class)
+        ;
+
+        $api->options("/{routes:.+}", fn($response) => $response);
 
         // $api->get('/attachment/(\d+)/download', 'Api\AdjuntosController@download');
         // $api->get('/project/(\d+)/attachments', 'Api\AdjuntosController@getAttachments');

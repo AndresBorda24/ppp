@@ -5,7 +5,11 @@ return [
         "ver"  => $_ENV["APP_VER"],
         "base" => $_ENV["APP_BASE"],
         "url"  => $_ENV["APP_URL"],
-        "env"  => $_ENV["APP_ENV"]
+        "env"  => $_ENV["APP_ENV"],
+        "secret" => $_ENV["APP_SECRET"],
+        "pass_method" => $_ENV["PASS_METHOD"],
+        "pass_key" => $_ENV["PASS_KEY"],
+        "pass_iv"  => $_ENV["PASS_IV"]
     ],
     "db" => [
         "host" => $_ENV["DB_HOST"],
