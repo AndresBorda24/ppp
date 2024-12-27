@@ -20,7 +20,7 @@ class DetailRequest
             "description"   => "nullable",
             "status"        => "default:new|required", //Cambiar esto al enum
             "delegate_id"   => "nullable",
-            "created_by_id" => "nullable",
+            "created_by_id" => "required",
             "priority"      => "default:normal|required", // Tambien esto
             "created_at"    => "default:".date("Y-m-d H:i:s")."|required",
             "started_at"    => "nullable",

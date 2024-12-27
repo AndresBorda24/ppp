@@ -9,10 +9,12 @@ import { TaskModalHeader } from "./TaskModalHeader"
 import { SubTask, Task } from "../../types"
 import { TaskModalMobileComments } from "./TaskModalMobileComments"
 import { TaskModalComments } from "./TaskModalComments"
+import { useUserInfo } from "../../hooks/useUserInfo"
 
 export const TaskModal: React.FC = () => {
   const { open, closeModal, task, patchTask, openModal } = useTaskModalStore()
   const { patchTask: patchTaskFromList, id: projectId, addNewTask } = useProjectStore()
+  const { user } = useUserInfo();
 
   if (! open) return;
 
@@ -32,6 +34,7 @@ export const TaskModal: React.FC = () => {
   }
 
   function onSubmitCreate() {
+    task.created_by_id = user.id;
     if (task.detail_type === 'task') {
       (task as Task).project_id = projectId;
       createTask(task as Task).then((data) => {

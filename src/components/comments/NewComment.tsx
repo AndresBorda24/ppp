@@ -5,6 +5,7 @@ import { BasicTextarea } from "../forms";
 import { BaseButton } from "../button";
 import { useProjectStore } from "../../stores/Project";
 import { appFetch } from "../../AppFetch";
+import { useUserInfo } from "../../hooks/useUserInfo";
 
 interface Props {
   className?: string;
@@ -14,6 +15,7 @@ interface Props {
 export const NewComment: React.FC<Props> = ({ type, id, className = "" }) => {
   const [showForm, setShowForm] = useState(false);
   const { id: projectId, addNewComment } = useProjectStore();
+  const { user } = useUserInfo();
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -33,7 +35,7 @@ export const NewComment: React.FC<Props> = ({ type, id, className = "" }) => {
       obs_type: type,
       project_id: projectId,
       body: comment,
-      author_id: 49,
+      author_id: user.id,
       created_at: "",
     };
 
