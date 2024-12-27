@@ -1,4 +1,5 @@
 import axios, { AxiosRequestConfig } from "axios";
+import { useAuthStore } from "./stores/Auth";
 
 type Method = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
 type FecthConfig = {
@@ -14,6 +15,14 @@ const AX = axios.create({
         'Content-Type': 'application/json'
     }
 });
+
+AX.interceptors.request.use((config) => {
+    const token = window.localStorage.getItem('pp_auth_token');
+    if (token && typeof token === 'string') {
+        config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+}, (error) =>  Promise.reject(error));
 
 const METHOD_HANDLERS = {
     GET: <T>({url, settings}: FecthConfig) => AX.get<T>(url, settings),

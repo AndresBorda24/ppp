@@ -73,3 +73,11 @@ export interface Comment {
 export interface CommentWithTitle extends Comment {
   title: string
 }
+
+export interface User {
+  id: number;
+  nombre: string;
+  documento: string;
+  area_id: number;
+  area_nombre: string;
+}
