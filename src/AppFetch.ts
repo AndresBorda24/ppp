@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from "axios";
-import { useAuthStore } from "./stores/Auth";
+import { LOCAL_STORAGE_AUTH_KEY } from "./constants";
 
 type Method = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
 type FecthConfig = {
@@ -17,7 +17,7 @@ const AX = axios.create({
 });
 
 AX.interceptors.request.use((config) => {
-    const token = window.localStorage.getItem('pp_auth_token');
+    const token = window.localStorage.getItem(LOCAL_STORAGE_AUTH_KEY);
     if (token && typeof token === 'string') {
         config.headers.Authorization = `Bearer ${token}`;
     }
