@@ -1,50 +1,17 @@
-import { ActionFunctionArgs } from "react-router-dom";
-import View from "../components/view";
-import { formatDate } from "../utils";
-import { appFetch } from "../AppFetch";
-import { useProjectStore } from "../stores/Project";
-import { CommentWithTitle, Project as ProjectType, Task as TaskType } from "../types";
-import { SelectPriority } from "../components/Priority";
-import { HelperDates } from "../components/HelperDates";
-import { XInput, XTextarea, AppInput } from "../components/forms";
-import { useEffect } from "react";
+import { AppInput, XInput, XTextarea } from "../../components/forms";
+
+import { SelectDateHelper } from "../../components/SelectDateHelper";
+import { SelectPriority } from "../../components/Priority";
+import { Tabs } from "../../components/project/Tabs";
+import { TaskModal } from "../../components/task/TaskModal";
+import View from "../../components/view";
+import { formatDate } from "../../utils";
 import { toast } from "sonner";
-import { Tabs } from "../components/project/Tabs";
-import { TaskModal } from "../components/task/TaskModal";
+import { updateProjectRequest } from "../../requests/project-request";
+import { useEffect } from "react";
+import { useProjectStore } from "../../stores/Project";
 
-export async function loader({ params }: ActionFunctionArgs) {
-  const { data, error } = await appFetch<ProjectType>("GET", {
-    url: `/projects/${params.slug}/find`,
-  });
-
-  if (error) throw error;
-  if (data === null) throw new Error("Project Not Found.");
-
-  const store = useProjectStore.getState();
-  store.rewriteProject(data);
-
-  appFetch<TaskType[]>("GET", {
-    url: `/projects/${data.id}/tasks`,
-  }).then(({ data, error }) => {
-    store.pushTaks(data ?? []);
-    error && toast.error("Imposible cargar listado de tareas");
-  });
-
-  appFetch<CommentWithTitle[]>("GET", {
-    url: `/projects/${data.id}/observations`,
-  }).then(({ data, error }) => {
-    store.pushComments(data ?? []);
-    error && toast.error("Imposible cargar listado de Comentarios");
-  });
-
-  return null;
-}
-
-async function updateProjectRequest({ id, body }: { id: number; body: any }) {
-  await appFetch<ProjectType>("PATCH", { url: `/projects/${id}/patch`, body });
-}
-
-const ProjectView: React.FC = () => {
+export const ProjectView: React.FC = () => {
   const {
     id,
     title,
@@ -161,9 +128,7 @@ const ProjectView: React.FC = () => {
                       onClick={() => setStartedAt()}
                       title="Establecer Fecha de Inicio"
                       className="text-[.6rem] px-1.5 py-0.5 rounded-md transition-colors duration-150 hover:bg-neutral-200 hover:shadow-lg"
-                    >
-                      ✔
-                    </button>
+                    > ✔ </button>
                   </div>
                 )}
               </div>
@@ -194,27 +159,3 @@ const ProjectView: React.FC = () => {
     </View>
   );
 };
-
-interface SelectDateHelperProps {
-  date: string | null;
-  setDate: (d: string) => void;
-}
-const SelectDateHelper: React.FC<SelectDateHelperProps> = ({
-  date = null,
-  setDate,
-}) => {
-  return (
-    <details className="relative">
-      <summary className="list-none h-4 rounded-full bg-neutral-800 text-neutral-300 inline-grid leading-none place-content-center aspect-square cursor-pointer select-none">
-        &bull;
-      </summary>
-      <HelperDates
-        defaultDate={date}
-        setDate={setDate}
-        className="absolute bg-neutral-50 p-2 rounded shadow-lg bottom-full right-0 border border-neutral-200 outline outline-offset-1 outline-1 outline-neutral-300"
-      />
-    </details>
-  );
-};
-
-export default ProjectView;

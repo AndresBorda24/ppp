@@ -18,6 +18,16 @@ export type Pagination = {
   last_page: number
 }
 
+export type IndexloaderDataType = {
+  data: PaginationProjects;
+  error: any;
+  title: string;
+  page: string;
+  order: string;
+  status: string;
+  amount: string;
+}
+
 export type DetailType = 'task'|'project'|'sub_task'
 
 export type PaginationProjects = {
