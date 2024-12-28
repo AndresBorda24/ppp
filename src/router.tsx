@@ -1,6 +1,9 @@
 import CreateProject, { action as createAction } from './routes/CreateProject.tsx'
 
+import Auth from './routes/Auth.tsx';
+import { AuthMiddleware } from './middleware/AuthMiddleware.tsx';
 import { ErrorPage } from "./routes/Error";
+import { GuestMiddleware } from './middleware/GuestMiddleware.tsx';
 import { IndexPage } from "./routes/index/IndexPage";
 import { ProjectView } from "./routes/project/ProjectView.tsx";
 import Root from "./routes/root";
@@ -15,25 +18,40 @@ export const router = createBrowserRouter([
     errorElement: <ErrorPage />,
     children: [
       {
+        element: <AuthMiddleware />,
         errorElement: <ErrorPage />,
         children: [
           {
-            index: true,
-            loader: indexLoader,
-            element: <IndexPage />,
-          },
-          {
-            path: '/new-project',
-            action: createAction,
-            element: <CreateProject />
-          },
-          {
-            path: '/p/:slug/ver',
-            loader: projectLoader,
-            element: <ProjectView />
+            element: <Auth />,
+            children: [
+              {
+                index: true,
+                loader: indexLoader,
+                element: <IndexPage />,
+              },
+              {
+                path: '/new-project',
+                action: createAction,
+                element: <CreateProject />
+              },
+              {
+                path: '/p/:slug/ver',
+                loader: projectLoader,
+                element: <ProjectView />
+              },
+            ]
           }
         ]
-      }
+      },
+      {
+        element: <GuestMiddleware />,
+        children: [
+          {
+            path: '/login',
+            element: (<div>Login</div>)
+          }
+        ]
+      },
     ]
   }
 ]);
