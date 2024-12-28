@@ -22,6 +22,12 @@ class TaskController
         return new JSonResponse($tasks);
     }
 
+    public function getAllForProjectBasic(int $projectId): Response
+    {
+        $tasks = $this->task->getFromProjectField($projectId);
+        return new JSonResponse($tasks);
+    }
+
     public function findOne(int $id): Response
     {
         return new JsonResponse($this->task->getOne(["T.id" => $id]));
@@ -48,5 +54,14 @@ class TaskController
     public function delete(int $id): Response
     {
         return new JsonResponse($this->task->remove($id));
+    }
+
+    public function patch(Request $request, int $id, DetailRequest $PR): Response
+    {
+        $body = $request->getParsedBody();
+        $data = array_intersect_assoc($PR->patch($body), $body);
+        $this->task->patch($id, $data);
+        $task = $this->task->getOne(["T.id" => $id]);
+        return new JsonResponse($task);
     }
 }

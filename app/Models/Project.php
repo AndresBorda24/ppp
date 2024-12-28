@@ -50,9 +50,6 @@ class Project
         ?string $order  = "desc"
     ) {
         try {
-            $page = (bool) $page ? $page : 1;
-            $offset = ($page * $amount) - $amount;
-
             $where = [
                 "D.status[~]" => $status,
                 "detail_type" => self::TYPE,
@@ -62,6 +59,14 @@ class Project
             $total = $this->db->count(self::TABLE." (P)", [
                 "[>]".Detalle::TABLE." (D)" => ["id" => "detail_id"]
             ], "D.id",  $where);
+
+            $page = (bool) $page ? $page : 1;
+            $offset = ($page * $amount) - $amount;
+
+            if ($offset > $total) {
+                $page = 1;
+                $offset = 0;
+            }
 
             $data = $this->db->select(self::TABLE." (P)", [
                 "[>]".Detalle::TABLE." (D)" => ["id" => "detail_id"]
@@ -302,8 +307,10 @@ class Project
         try {
             return $this->db->get(self::TABLE." (P)", [
                 "[>]".Detalle::TABLE." (D)" => [
-                    "P.id" => "D.detail_id",
-                    "detail_type" => self::TYPE
+                    "P.id" => "detail_id",
+                    'AND' => [
+                        "detail_type" => self::TYPE
+                    ]
                 ]
             ], [
                 "P.id", 'estimated_time', 'due_date', 'slug',
@@ -315,6 +322,31 @@ class Project
             throw $e;
         }
     }
+    /**
+     * Actuliza la información de ciertos campos del projecto junto con su
+     * detalle.
+     *
+     * @param array $data Contiene la informacion a actualizar. Llave: nombre
+     *                    del campo, Valor: valor.
+     */
+    public function patch(int $id, array $data): bool
+    {
+        $details = new Detalle($this->db);
+        $projectFields = ['due_date', 'estimated_time'];
+
+        foreach ($data as $field => $value) {
+            if (in_array($field, $projectFields)) {
+                $this->db->update(self::TABLE, [
+                    $field => $value
+                ], ['id' => $id]);
+                continue;
+            }
+
+            $details->patch([
+                'detail_type' => self::TYPE,
+                'detail_id'   => $id
+            ], [$field => $value]);
+        }
+        return true;
+    }
 }
-
-

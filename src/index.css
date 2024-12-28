@@ -1,0 +1,75 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Ubuntu', sans-serif;
+  font-size: 14px;
+}
+
+.aside-button,
+.aside-project-button,
+.aside-project-container > header,
+.aside-project-container > ul li {
+  padding: 7px 4px;
+  border-radius: 5px;
+}
+.aside-project-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding-left: 15px;
+}
+
+.full-project-list {
+  display: grid;
+  align-content: space-between;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px
+}
+
+.form-invalid {
+  @apply bg-red-50 border-red-300 focus:!ring-red-100 focus:!border-red-600;
+}
+
+.tiny-scrollbar {
+  --sb-track-color: #f5f5f5;
+  --sb-thumb-color: #82b4bf;
+  --sb-size: 4px;
+}
+
+.tiny-scrollbar::-webkit-scrollbar {
+  width: var(--sb-size)
+}
+
+.tiny-scrollbar::-webkit-scrollbar-track {
+  background: var(--sb-track-color);
+  border-radius: 3px;
+}
+
+.tiny-scrollbar::-webkit-scrollbar-thumb {
+  background: var(--sb-thumb-color);
+  border-radius: 3px;
+
+}
+
+@supports not selector(::-webkit-scrollbar) {
+  .tiny-scrollbar {
+    scrollbar-color: var(--sb-thumb-color)
+                     var(--sb-track-color);
+  }
+}
+
+@media (min-width: 640px) {
+  .tiny-scrollbar {
+    --sb-track-color: transparent;
+    --sb-thumb-color: transparent;
+    --sb-size: 4px;
+  }
+
+  .tiny-scrollbar:hover {
+    --sb-track-color: #f5f5f5;
+    --sb-thumb-color: #82b4bf;
+    --sb-size: 4px;
+  }
+}

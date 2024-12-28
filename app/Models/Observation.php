@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Medoo\Medoo;
-use App\Dto\ObservacionDto;
+use App\Dto\CommentDto;
 
 class Observation
 {
@@ -13,20 +13,33 @@ class Observation
         public readonly Medoo $db
     ) {}
 
-    public function create(ObservacionDto $data): ?string
+    public function create(CommentDto $data): ?array
     {
         try {
             $this->db->insert(self::TABLE, [
                 'body' => $data->body,
                 'obs_id' => $data->obs_id,
-                'obs_type' => $data->obs_type,
+                'obs_type' => $data->obs_type->value,
                 'author_id' => $data->author_id,
+                'project_id' => $data->project_id,
             ]);
 
-            return $this->db->id();
+            return $this->find(["O.id" => $this->db->id()]);
         } catch (\Exception $e) {
             throw $e;
         }
+    }
+
+    public function find(array $where): ?array
+    {
+        return $this->db->get(self::TABLE." (O)", [
+            "[>]".Detalle::TABLE." (D)" => [
+                "obs_type" => "detail_type",
+                "obs_id"   => "detail_id"
+            ]
+        ],[
+            "O.id", "title", "O.body", "author_id", "O.created_at", "obs_type", "obs_id"
+        ], $where);
     }
 
     public function remove(int|string $id): bool

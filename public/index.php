@@ -29,8 +29,7 @@ $dotenv->load();
 | Se configura el contenedor.
 + ------------------------------------------------------------------------------
 */
-$c = new \DI\Container(require PROJECT_ROOT . "/config/ContainerBindings.php");
-$app = \DI\Bridge\Slim\Bridge::create($c);
+$app = \DI\Bridge\Slim\Bridge::create(require PROJECT_ROOT . "/config/configContainer.php");
 
 /* -----------------------------------------------------------------------------
 | Cargamos las rutas

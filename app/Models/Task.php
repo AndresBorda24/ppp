@@ -132,6 +132,18 @@ class Task
     /** Obtiene todas las tareas relacionadas con un Projecto */
     public function getFromProject(int|string $projectId)
     {
+        return $this->getFromProjectField($projectId,[
+            "T.id", "D.id (detail_id)",
+            "title", "description", "status", "delegate_id", "created_by_id",
+            "priority", "created_at", "started_at", "updated_at", "finished_at",
+            "detail_type", "detail_id"
+        ]);
+    }
+
+    /** Obtiene todas las tareas relacionadas con un Projecto seleccionando campos */
+    public function getFromProjectField(int|string $projectId, array $fields = [
+        "T.id", "D.id (detail_id)", "title", "description", "status", "detail_type"
+    ]) {
         try {
             return $this->db->select(Detalle::TABLE." (D)", [
                     "[>]".self::TABLE." (T)" => [
@@ -140,17 +152,32 @@ class Task
                             "detail_type" => self::TYPE
                         ]
                     ]
-                ], [
-                    "T.id", "D.id (detail_id)",
-                    "title", "description", "status", "delegate_id", "created_by_id",
-                    "priority", "created_at", "started_at", "updated_at", "finished_at",
-                    "detail_type", "detail_id"
-                ], [
+                ], $fields, [
                     "T.project_id" => $projectId
                 ]);
         } catch(\Exception $e) {
             throw $e;
         }
+    }
+
+    /**
+     * Actuliza la información de ciertos campos de la tarea
+     *
+     * @param array $data Contiene la informacion a actualizar. Llave: nombre
+     *                    del campo, Valor: valor.
+     */
+    public function patch(int $id, array $data): bool
+    {
+        $details = new Detalle($this->db);
+
+        foreach ($data as $field => $value) {
+            $details->patch([
+                'detail_type' => self::TYPE,
+                'detail_id'   => $id
+            ], [$field => $value]);
+        }
+
+        return true;
     }
 
     // public function getProgress(): int

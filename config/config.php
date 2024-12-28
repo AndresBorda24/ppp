@@ -3,9 +3,13 @@ return [
     "app" => [
         "name" => $_ENV["APP_NAME"],
         "ver"  => $_ENV["APP_VER"],
-        "base" => $_ENV["APP_PATH"],
+        "base" => $_ENV["APP_BASE"],
         "url"  => $_ENV["APP_URL"],
-        "env"  => $_ENV["APP_ENV"]
+        "env"  => $_ENV["APP_ENV"],
+        "secret" => $_ENV["APP_SECRET"],
+        "pass_method" => $_ENV["PASS_METHOD"],
+        "pass_key" => $_ENV["PASS_KEY"],
+        "pass_iv"  => $_ENV["PASS_IV"]
     ],
     "db" => [
         "host" => $_ENV["DB_HOST"],
@@ -19,13 +23,11 @@ return [
     ],
     "assets" => [
         "templates"   => __DIR__ . "/.." . $_ENV["TEMPLATES"],
-        "entrypoints" => __DIR__ . "/.." . $_ENV["ENTRYPOINTS_PATH"]
     ],
     "session" => [
         'name'       => $_ENV["APP_NAME"] . '_session',
         'secure'     => false,
         'httponly'   => true,
         'samesite'   => 'lax',
-    ],
-    "soportes" => __DIR__ . "/../soportes"
+    ]
 ];
