@@ -1,6 +1,7 @@
-import { ActionFunctionArgs, json } from "react-router-dom";
+import { ActionFunctionArgs, json, redirect } from "react-router-dom";
 
 import { appFetch } from "../../AppFetch";
+import { useAuthStore } from "../../stores/Auth";
 
 export const loginAction = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
@@ -12,5 +13,9 @@ export const loginAction = async ({ request }: ActionFunctionArgs) => {
   });
 
   if (error) return json(error);
-  return json({ data });
+  if (! data?.token) return json({ error: "Fallo al iniciar sesión" });
+
+  const authStore = useAuthStore.getState();
+  authStore.login(data.token);
+  return redirect("/");
 };

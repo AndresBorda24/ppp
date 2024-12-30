@@ -7,7 +7,7 @@ export default function Root () {
 
   return (
     <>
-      <Toaster />
+      <Toaster closeButton richColors/>
       <Outlet />
     </>
   )

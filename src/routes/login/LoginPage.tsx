@@ -19,7 +19,7 @@ export const LoginPage: React.FC = () => {
         <div className="rounded shadow p-6 w-full max-w-md bg-white">
           <h1 className="font-bold text-lg">Inicio de sesión</h1>
           {data ? (
-            <ShowRequestErrors errors={data} className="mt-1 mb-2" fieldErros />
+            <ShowRequestErrors errors={data} className="mt-1 mb-2" fieldErrors />
           ) : null}
           <Form method="POST" id="login-form">
             <label className="block text-sm text-neutral-500 mb-4">
