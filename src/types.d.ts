@@ -1,12 +1,12 @@
 export type PaginatedProject = {
-    id: number;
-    slug: string;
-    title: string;
-    description: string;
-    status: string;
-    priority: Priority;
-    created_at: string;
-}
+  id: number;
+  slug: string;
+  title: string;
+  description: string;
+  status: string;
+  priority: Priority;
+  created_at: string;
+};
 
 export type Pagination = {
   current_page: number;
@@ -15,8 +15,8 @@ export type Pagination = {
     total: number;
     per_page: number;
   };
-  last_page: number
-}
+  last_page: number;
+};
 
 export type IndexloaderDataType = {
   data: PaginationProjects;
@@ -26,14 +26,14 @@ export type IndexloaderDataType = {
   order: string;
   status: string;
   amount: string;
-}
+};
 
-export type DetailType = 'task'|'project'|'sub_task'
+export type DetailType = "task" | "project" | "sub_task";
 
 export type PaginationProjects = {
-  data: PaginatedProject[],
-  pagination: Pagination
-}
+  data: PaginatedProject[];
+  pagination: Pagination;
+};
 
 export interface Details {
   detail_id: number;
@@ -48,7 +48,7 @@ export interface Details {
   due_date?: string;
   estimated_time?: string;
   finished_at?: string;
-  started_at?: string
+  started_at?: string;
   updated_at?: string;
 }
 
@@ -57,8 +57,8 @@ export interface Project extends Details {
   slug: string;
 }
 
-export type Priority = 'high'|'normal'|'low'
-export type Status = 'new'|'finished'|'process'|'paused'
+export type Priority = "high" | "normal" | "low";
+export type Status = "new" | "finished" | "process" | "paused";
 
 export interface Task extends Details {
   id: number;
@@ -71,17 +71,17 @@ export interface SubTask extends Details {
 }
 
 export interface Comment {
-  id: number,
-  body: string,
-  author_id: number,
-  created_at: string,
-  obs_type: DetailType,
-  obs_id: number,
-  project_id: number
+  id: number;
+  body: string;
+  author_id: number;
+  created_at: string;
+  obs_type: DetailType;
+  obs_id: number;
+  project_id: number;
 }
 
 export interface CommentWithTitle extends Comment {
-  title: string
+  title: string;
 }
 
 export interface User {
@@ -90,4 +90,13 @@ export interface User {
   documento: string;
   area_id: number;
   area_nombre: string;
+}
+
+export interface RequestError {
+  status?: boolean;
+  error: string
+}
+
+export interface RequestFormError extends RequestError {
+  fields?: { [k: string]: string[] };
 }
