@@ -1,14 +1,15 @@
-import { useTaskModalStore } from "../../stores/TaskModal"
-import { TaskUpdateForm } from "./TaskUpdateForm"
+import { SubTask, Task } from "../../types"
+import { createSubTask, createTask, updateSubTask, updateTask } from "../../requests/tasks-requests"
+
 import { TaskCreateForm } from "./TaskCreateForm"
-import { createSubTask, createTask, updateTask, updateSubTask } from "../../requests/tasks-requests"
-import { useProjectStore } from "../../stores/Project"
-import { TaskModalSubtaskList } from "./TaskModalSubtaskList"
+import { TaskModalComments } from "./TaskModalComments"
 import { TaskModalFooter } from "./TaskModalFooter"
 import { TaskModalHeader } from "./TaskModalHeader"
-import { SubTask, Task } from "../../types"
 import { TaskModalMobileComments } from "./TaskModalMobileComments"
-import { TaskModalComments } from "./TaskModalComments"
+import { TaskModalSubtaskList } from "./TaskModalSubtaskList"
+import { TaskUpdateForm } from "./TaskUpdateForm"
+import { useProjectStore } from "../../stores/Project"
+import { useTaskModalStore } from "../../stores/TaskModal"
 import { useUserInfo } from "../../hooks/useUserInfo"
 
 export const TaskModal: React.FC = () => {

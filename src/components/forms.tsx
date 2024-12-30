@@ -194,9 +194,7 @@ export const BasicTextarea: React.FC<BasicTextareaProps> = ({
       ref={textarea}
       placeholder={placeholder}
       className={`block focus-visible:outline-none ${className}`}
-    >
-      {" "}
-    </textarea>
+    ></textarea>
   );
 };
 
