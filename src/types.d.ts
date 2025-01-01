@@ -82,6 +82,7 @@ export interface Comment {
 
 export interface CommentWithTitle extends Comment {
   title: string;
+  author_name: string;
 }
 
 export interface User {
