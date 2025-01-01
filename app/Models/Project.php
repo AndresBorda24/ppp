@@ -311,10 +311,18 @@ class Project
                     'AND' => [
                         "detail_type" => self::TYPE
                     ]
+                ],
+                "[>]".User::TABLE." (A)" => [
+                    "D.created_by_id" => "usuario_id"
+                ],
+                "[>]".User::TABLE." (DE)" => [
+                    "D.delegate_id" => "usuario_id"
                 ]
             ], [
                 "P.id", 'estimated_time', 'due_date', 'slug',
-                ...Detalle::getFields("D")
+                "author_name" => User::getUserFullNameSql("A"),
+                "delegated_name" => User::getUserFullNameSql("DE"),
+                ...Detalle::getFields("D"),
             ], [
                 "slug" => $slug
             ]);

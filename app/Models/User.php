@@ -11,6 +11,16 @@ class User
 
     public function __construct(public readonly Medoo $db) {}
 
+    public static function getUserFullNameSql(string $sufix)
+    {
+        $SQL = str_replace(
+            "%s",
+            $sufix,
+            "CONCAT_WS(' ', %s.<usuario_nombre1>, %s.<usuario_nombre2>, %s.<usuario_apellido1>, %s.<usuario_apellido2>)"
+        );
+        return Medoo::raw($SQL);
+    }
+
     public function find(array $where): ?UserDto
     {
         $userInfo = $this->db->get(self::TABLE . ' (U)', [

@@ -144,6 +144,11 @@ class Task
     public function getFromProjectField(int|string $projectId, array $fields = [
         "T.id", "D.id (detail_id)", "title", "description", "status", "detail_type"
     ]) {
+        $fields = array_merge($fields, [
+            "author_name" => User::getUserFullNameSql("A"),
+            "delegated_name" => User::getUserFullNameSql("DE")
+        ]);
+
         try {
             return $this->db->select(Detalle::TABLE." (D)", [
                     "[>]".self::TABLE." (T)" => [
@@ -151,6 +156,12 @@ class Task
                         "AND" => [
                             "detail_type" => self::TYPE
                         ]
+                    ],
+                    "[>]".User::TABLE." (A)" => [
+                        "D.created_by_id" => "usuario_id"
+                    ],
+                    "[>]".User::TABLE." (DE)" => [
+                        "D.delegate_id" => "usuario_id"
                     ]
                 ], $fields, [
                     "T.project_id" => $projectId
