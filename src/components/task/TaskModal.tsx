@@ -40,6 +40,7 @@ export const TaskModal: React.FC = () => {
       (task as Task).project_id = projectId;
       createTask(task as Task).then((data) => {
         if (data.data) {
+          data.data.author_name = user.nombre;
           addNewTask(data.data);
           openModal(data.data);
         }
@@ -49,6 +50,7 @@ export const TaskModal: React.FC = () => {
     if (task.detail_type === 'sub_task') {
       createSubTask(task as SubTask).then((data) => {
         if (data.data) {
+          data.data.author_name = user.nombre;
           openModal(data.data);
         }
       });
