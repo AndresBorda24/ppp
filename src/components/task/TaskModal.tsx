@@ -58,9 +58,9 @@ export const TaskModal: React.FC = () => {
   }
 
   return (
-    <div className="fixed top-0 left-0 h-screen w-screen bg-black/50 flex  justify-center items-center overflow-y-auto z-20">
+    <div className="fixed top-0 left-0 h-screen w-screen bg-black/50 flex justify-center md:items-center overflow-y-auto z-20">
       <TaskModalComments />
-      <div className="bg-white rounded-md overflow-hidden w-screen h-screen h-[100dvh] md:max-h-[90vh] max-w-[450px] flex flex-col shadow">
+      <div className="bg-white rounded-md overflow-hidden w-screen h-dvh md:max-h-[90vh] max-w-[450px] flex flex-col shadow">
         <TaskModalHeader />
         <div className="px-5 py-4 flex-grow overflow-auto">
           {
