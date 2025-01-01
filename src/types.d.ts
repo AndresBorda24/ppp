@@ -50,6 +50,8 @@ export interface Details {
   finished_at?: string;
   started_at?: string;
   updated_at?: string;
+  author_name?: string;
+  delegate_name?: string;
 }
 
 export interface Project extends Details {
