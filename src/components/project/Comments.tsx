@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { useProjectStore } from "../../stores/Project";
-import { CommentItem } from "../comments/CommentItem";
-import { useDebounce } from "use-debounce";
-import { CommentWithTitle } from "../../types";
+
 import { AppInput } from "../forms";
+import { CommentItem } from "../comments/CommentItem";
+import { CommentWithTitle } from "../../types";
 import { NewComment } from "../comments/NewComment";
+import { useDebounce } from "use-debounce";
+import { useProjectStore } from "../../stores/Project";
 
 export const Comments: React.FC = () => {
   const { comments, id } = useProjectStore();
@@ -41,6 +42,7 @@ export const Comments: React.FC = () => {
 
         <AppInput
           type="search"
+          name="search-comments"
           defaultValue={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Buscar comentarios"
