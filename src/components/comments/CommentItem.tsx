@@ -1,22 +1,30 @@
-import { CommentWithTitle as CommentType, DetailType } from "../../types";
+import { CommentWithTitle as CommentType } from "../../types";
+import { SelfhideMenu } from "../SelfhideMenu";
+import { SelfhideMenuItem } from "../SelfhideMenuItem";
 
 interface Props {
   comment: CommentType;
 }
 export const CommentItem: React.FC<Props> = ({ comment }) => {
   return (
-    <div className="flex gap-4" role="listitem">
+    <div className="flex gap-4 relative" role="listitem">
+      <div className="absolute top-0 right-0 mt-1 mr-1">
+        <SelfhideMenu>
+          <SelfhideMenuItem onClick={() => console.log("Eliminando")} label="Eliminar" icon="ic:round-delete"/>
+        </SelfhideMenu>
+      </div>
+
       <div className="flex-shrink-0">
         <img
           className="h-7 w-7 rounded-full"
-          src={`https://ui-avatars.com/api/?name=${comment.author_id}`}
+          src={`https://ui-avatars.com/api/?name=${comment.author_name || comment.author_id}&size=32`}
           alt={`Comentario por: ${comment.author_id}`}
           title={`Comentario por: ${comment.author_id}`}
         />
       </div>
       <div className={`flex flex-col text-sm text-neutral-600 overflow-auto`}>
-        <div className="flex items-center gap-4">
-          <span className="font-bold">{comment.author_id}</span>
+        <div className="leading-tight">
+          <span className="font-bold text-xs">{comment.author_name}</span><br />
           <span className="font-light text-xs block pr-2 text-neutral-400">
             {comment.created_at}
           </span>

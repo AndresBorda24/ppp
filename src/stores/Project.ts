@@ -1,5 +1,5 @@
-import { create, StateCreator } from "zustand";
-import { Project, Task, Comment, CommentWithTitle } from "../types";
+import { CommentWithTitle, Project, Task } from "../types";
+import { StateCreator, create } from "zustand";
 
 interface ProjectState extends Project {
     tasks: Task[];

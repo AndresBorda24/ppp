@@ -1,4 +1,5 @@
-import axios, { AxiosRequestConfig } from "axios";
+import axios, { AxiosError, AxiosRequestConfig } from "axios";
+
 import { LOCAL_STORAGE_AUTH_KEY } from "./constants";
 
 type Method = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
@@ -48,7 +49,7 @@ export async function appFetch<T>(
         const { data: d } = await handler<T>({url, body, settings});
         data = d;
     } catch (e) {
-        error = e;
+        error = (e as AxiosError).response?.data || e;
     }
 
     return { error, data };

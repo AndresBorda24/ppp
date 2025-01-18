@@ -3,11 +3,12 @@ import { Toaster } from "sonner"
 import { useInitialAuth } from "../hooks/useInitialAuth"
 
 export default function Root () {
-  useInitialAuth();
+  const { started } = useInitialAuth();
+  if (!started) return null;
 
   return (
     <>
-      <Toaster />
+      <Toaster closeButton richColors/>
       <Outlet />
     </>
   )

@@ -129,12 +129,20 @@ class Subtask
                 "AND" => [
                     "detail_type" => self::TYPE
                 ]
+            ],
+            "[>]".User::TABLE." (A)" => [
+                "D.created_by_id" => "usuario_id"
+            ],
+            "[>]".User::TABLE." (DE)" => [
+                "D.delegate_id" => "usuario_id"
             ]
         ], [
             "S.id", "D.id (detail_id)", "S.task_id",
             "title", "description", "status", "delegate_id", "created_by_id",
             "priority", "created_at", "started_at", "updated_at", "finished_at",
-            "detail_type", "detail_id"
+            "detail_type", "detail_id",
+            "author_name" => User::getUserFullNameSql("A"),
+            "delegated_name" => User::getUserFullNameSql("DE"),
         ], ["S.task_id" => $taskId]);
     }
 

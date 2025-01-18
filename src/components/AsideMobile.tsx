@@ -1,11 +1,12 @@
-import { Icon } from '@iconify-icon/react'
 import { NavLink, useLocation } from "react-router-dom"
+
+import { Icon } from '@iconify-icon/react'
 
 export const AsideMobile: React.FC = () => {
   const { pathname } = useLocation()
 
   return (
-    <div className="md:hidden bottom-0 left-0 w-svw">
+    <div className="md:hidden bottom-0 left-0 w-svw fixed">
       <nav className="mx-auto p-1 bg-neutral-100 flex justify-center gap-2 items-end relative py-1">
         <CustomNavLink to='/' label='Projects' icon='ph:books-fill' />
         <AsideMobileButton label='Activity' icon='fluent:tasks-app-20-filled' />

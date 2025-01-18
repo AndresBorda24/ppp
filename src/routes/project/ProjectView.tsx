@@ -20,6 +20,7 @@ export const ProjectView: React.FC = () => {
     priority,
     created_at,
     due_date,
+    author_name,
     patchProject,
   } = useProjectStore((state) => state);
 
@@ -128,7 +129,10 @@ export const ProjectView: React.FC = () => {
                       onClick={() => setStartedAt()}
                       title="Establecer Fecha de Inicio"
                       className="text-[.6rem] px-1.5 py-0.5 rounded-md transition-colors duration-150 hover:bg-neutral-200 hover:shadow-lg"
-                    > ✔ </button>
+                    >
+                      {" "}
+                      ✔{" "}
+                    </button>
                   </div>
                 )}
               </div>
@@ -151,6 +155,12 @@ export const ProjectView: React.FC = () => {
               </div>
             </div>
           </form>
+          {author_name ? (
+            <p className="italic text-xs text-neutral-400 pt-5">
+              Proyecto Creado Por:&nbsp;
+              <span className="font-bold">{author_name}</span>
+            </p>
+          ) : null}
         </section>
 
         <Tabs />

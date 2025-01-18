@@ -36,9 +36,13 @@ class Observation
             "[>]".Detalle::TABLE." (D)" => [
                 "obs_type" => "detail_type",
                 "obs_id"   => "detail_id"
-            ]
+            ],
+            "[>]".User::TABLE." (U)" => [
+                "O.author_id" => "usuario_id"
+            ],
         ],[
-            "O.id", "title", "O.body", "author_id", "O.created_at", "obs_type", "obs_id"
+            "O.id", "title", "O.body", "author_id", "O.created_at", "obs_type", "obs_id",
+            "author_name" => User::getUserFullNameSql("U")
         ], $where);
     }
 
@@ -60,12 +64,18 @@ class Observation
     {
         try {
             return $this->db->select(self::TABLE." (O)", [
+                "[>]".User::TABLE." (U)" => [
+                    "O.author_id" => "usuario_id"
+                ],
                 "[>]".Detalle::TABLE." (D)" => [
                     "obs_type" => "detail_type",
                     "obs_id"   => "detail_id"
                 ]
             ],[
-                "O.id", "title", "O.body", "author_id", "O.created_at", "obs_type", "obs_id"
+                "O.id", "title", "O.body", "author_id", "O.created_at", "obs_type", "obs_id",
+                "author_name" => Medoo::raw(
+                    "CONCAT_WS(' ', <usuario_nombre1>, <usuario_nombre2>, <usuario_apellido1>, <usuario_apellido2>)"
+                ),
             ], [
                 "O.project_id" => $projectId,
                 "ORDER" => [

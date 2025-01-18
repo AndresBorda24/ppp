@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
-import { Task as TaskType } from "../../types";
-import { useProjectStore } from "../../stores/Project";
-import { Icon } from "@iconify-icon/react";
+
 import { AppInput } from "../forms";
-import { useDebounce } from "use-debounce";
-import { useTaskModalStore } from "../../stores/TaskModal";
+import { Icon } from "@iconify-icon/react";
 import { TaskItem } from "../task/TaskList";
+import { Task as TaskType } from "../../types";
+import { useDebounce } from "use-debounce";
+import { useProjectStore } from "../../stores/Project";
+import { useTaskModalStore } from "../../stores/TaskModal";
 
 interface TaskListProps {
   className?: string;
@@ -60,6 +61,7 @@ export const TaskList: React.FC<TaskListProps> = ({ className = "" }) => {
         </div>
         <AppInput
           type="search"
+          name="search-task"
           defaultValue={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="Terminar el filtrado de tareas"
