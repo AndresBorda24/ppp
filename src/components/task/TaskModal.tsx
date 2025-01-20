@@ -5,6 +5,7 @@ import { TaskCreateForm } from "./TaskCreateForm"
 import { TaskModalComments } from "./TaskModalComments"
 import { TaskModalFooter } from "./TaskModalFooter"
 import { TaskModalHeader } from "./TaskModalHeader"
+import { TaskModalManagment } from "./TaskModalManagment"
 import { TaskModalMobileComments } from "./TaskModalMobileComments"
 import { TaskModalSubtaskList } from "./TaskModalSubtaskList"
 import { TaskUpdateForm } from "./TaskUpdateForm"
@@ -70,6 +71,7 @@ export const TaskModal: React.FC = () => {
           }
           <TaskModalSubtaskList />
           <TaskModalMobileComments />
+          <TaskModalManagment />
         </div>
         <TaskModalFooter item={task} />
       </div>

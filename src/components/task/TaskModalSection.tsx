@@ -4,11 +4,12 @@ import { useState } from "react";
 interface Props {
   title: string,
   children: React.ReactNode,
+  closedByDefault?: boolean,
   topChildren?: React.ReactNode
 }
 
-export const TaskModalSection: React.FC<Props> = ({ title, children, topChildren = null }) => {
-  const [show, setShow] = useState(true);
+export const TaskModalSection: React.FC<Props> = ({ title, children, closedByDefault = false, topChildren = null }) => {
+  const [show, setShow] = useState(! closedByDefault);
 
   return (
     <section className="relative">
