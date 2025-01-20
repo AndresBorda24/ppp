@@ -3,7 +3,7 @@ import { useRef } from "react";
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;
-  onClickOutside?: () => void | undefined;
+  onClickOutside?: (e: MouseEvent | TouchEvent | FocusEvent) => void | undefined;
 }
 export const ContentWrapper: React.FC<Props> = ({
   onClickOutside,
@@ -11,8 +11,8 @@ export const ContentWrapper: React.FC<Props> = ({
   ...props
 }) => {
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const handleOnClickOutside = () => {
-    if (onClickOutside) onClickOutside();
+  const handleOnClickOutside = (e: MouseEvent | TouchEvent | FocusEvent) => {
+    if (onClickOutside) onClickOutside(e);
   };
 
   useOnClickOutside(wrapperRef, handleOnClickOutside);
