@@ -27,7 +27,7 @@ export const SelfhideMenu: React.FC<Props> = ({ children }) => {
         <ContentWrapper
           role="menu"
           onClickOutside={handleOnClickOutside}
-          className="py-2 rounded-lg shadow-[0_8px_30px_rgb(0,0,0,0.12)] bg-white absolute top-0 right-full mr-1 min-w-32"
+          className="py-2 rounded-lg shadow-sm border border-neutral-100 bg-white absolute top-0 right-full mr-1 min-w-32"
         >{children}</ContentWrapper>
       )}
     </div>

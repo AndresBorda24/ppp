@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosRequestConfig } from "axios";
 
 import { LOCAL_STORAGE_AUTH_KEY } from "./constants";
+import { RequestFormError } from "./types";
 
 type Method = 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
 type FecthConfig = {
@@ -34,14 +35,14 @@ const METHOD_HANDLERS = {
 };
 
 /** Realiza una solicitud HTTP */
-export async function appFetch<T>(
+export async function appFetch<T, E = RequestFormError>(
     method: Method,
     { url, body = null, settings = {} }: FecthConfig
 ): Promise<{
     data: T|null,
-    error: unknown
+    error: E|null
 }> {
-    let error:unknown = null;
+    let error:E|null = null;
     let data:T|null = null;
 
     try {
@@ -49,7 +50,7 @@ export async function appFetch<T>(
         const { data: d } = await handler<T>({url, body, settings});
         data = d;
     } catch (e) {
-        error = (e as AxiosError).response?.data || e;
+        error = (e as AxiosError).response?.data as E;
     }
 
     return { error, data };

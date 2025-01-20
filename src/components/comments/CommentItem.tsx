@@ -1,18 +1,32 @@
 import { CommentWithTitle as CommentType } from "../../types";
 import { SelfhideMenu } from "../SelfhideMenu";
 import { SelfhideMenuItem } from "../SelfhideMenuItem";
+import { deleteComment } from "../../requests/comment-request";
+import { useProjectStore } from "../../stores/Project";
+import { useUserInfo } from "../../hooks/useUserInfo";
 
 interface Props {
   comment: CommentType;
 }
 export const CommentItem: React.FC<Props> = ({ comment }) => {
+  const { user } = useUserInfo();
+  const { removeComment, addNewComment } = useProjectStore();
+
+  const hanldeDeleteComment = async () => {
+    removeComment(comment);
+    const deleted = await deleteComment(comment);
+    if (! deleted) addNewComment(comment);
+  }
+
   return (
     <div className="flex gap-4 relative" role="listitem">
-      <div className="absolute top-0 right-0 mt-1 mr-1">
-        <SelfhideMenu>
-          <SelfhideMenuItem onClick={() => console.log("Eliminando")} label="Eliminar" icon="ic:round-delete"/>
-        </SelfhideMenu>
-      </div>
+      {(user.id === comment.author_id) ? (
+        <div className="absolute top-0 right-0 mt-1 mr-1">
+          <SelfhideMenu>
+            <SelfhideMenuItem onClick={() => {hanldeDeleteComment()}} label="Eliminar" icon="ic:round-delete"/>
+          </SelfhideMenu>
+        </div>
+      ) : null}
 
       <div className="flex-shrink-0">
         <img

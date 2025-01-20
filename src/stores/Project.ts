@@ -10,6 +10,7 @@ interface ProjectSlice extends ProjectState {
     patchProject: (key:  keyof Exclude<ProjectState, 'tasks'>, val: unknown) => void
     rewriteProject: (val: Project) => void
     pushComments: (val: CommentWithTitle[]) => void
+    removeComment: (val: CommentWithTitle) => void
     addNewComment: (val: CommentWithTitle) => void
     pushTaks: (val: Task[]) => void
     patchTask: (val: Task) => void,
@@ -52,6 +53,10 @@ const createProjectSlice: StateCreator<
     pushComments: (comments) => set(() => ({ comments })),
     addNewComment: (comment) => set((state) => {
         const comments = [comment, ...state.comments];
+        return { comments };
+    }),
+    removeComment: (comment) => set((state) => {
+        const comments = state.comments.filter(c => c.id !== comment.id);
         return { comments };
     })
 })
