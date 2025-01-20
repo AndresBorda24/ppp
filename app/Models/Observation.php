@@ -46,16 +46,6 @@ class Observation
         ], $where);
     }
 
-    public function remove(int|string $id): bool
-    {
-        try {
-            $this->db->delete(self::TABLE, ["id" => $id]);
-            return true;
-        } catch (\Exception $e) {
-            throw $e;
-        }
-    }
-
     /**
      * Obtiene todas las observaciones relacionadas a un proyecto
      * @return array
@@ -120,5 +110,11 @@ class Observation
         } catch(\Exception $e) {
             throw $e;
         }
+    }
+
+    public function remove(array $where): bool
+    {
+        $result = $this->db->delete(self::TABLE, $where);
+        return ($result?->rowCount() ?? 0) > 0;
     }
 }

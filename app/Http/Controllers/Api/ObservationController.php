@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Api;
 
 use App\Dto\CommentDto;
+use App\Dto\UserDto;
 use App\Http\Requests\ObservationRequest;
 use App\Models\Observation;
 use Laminas\Diactoros\Response\JsonResponse;
@@ -32,5 +33,19 @@ class ObservationController
         $comment = $this->obs->create($comment);
 
         return new JsonResponse($comment);
+    }
+
+    public function deleteComment(UserDto $user, int $id): Response
+    {
+        $comment = $this->obs->find(['O.id' => $id]);
+
+        if (! $comment) return new JsonResponse(["error" => "Not found"], 404);
+        if ($comment['author_id'] !== $user->id) return new JsonResponse([
+            "error" => "No autorizado."
+        ], 401);
+
+        return new JsonResponse([
+            "status" => $this->obs->remove([ 'id' => $id ])
+        ]);
     }
 }

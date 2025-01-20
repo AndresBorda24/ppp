@@ -55,6 +55,7 @@ return function (App $app) {
 
             $api->group("/comments", function (Group $cm) {
                 $cm->post("/create", [ObservationController::class, "createComment"]);
+                $cm->delete("/{id:[0-9]+}/remove", [ObservationController::class, "deleteComment"]);
             });
         })
             ->add(\App\Http\Middleware\AuthMiddleware::class)
