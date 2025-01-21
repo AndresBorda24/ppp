@@ -1,12 +1,13 @@
 import { BasicInput, BasicTextarea } from "../forms";
 import { SubTask, Task } from "../../types";
+import { updateSubTask, updateTask } from "../../requests/tasks-requests";
 
 import { BaseButton } from "../button";
 import { SelectPriority } from "../Priority";
 import { useEffect } from "react";
+import { useProjectStore } from "../../stores/Project";
 
 interface Props {
-  onSubmit: () => void;
   onCancel?: () => void;
   patch: (key: keyof Task, value: unknown) => void;
   item: Task | SubTask;
@@ -14,9 +15,23 @@ interface Props {
 export const TaskUpdateForm: React.FC<Props> = ({
   item,
   patch,
-  onSubmit,
   onCancel,
 }) => {
+  const { patchTask: patchTaskFromList } = useProjectStore()
+
+  const updateItemTask = () => {
+      patchTaskFromList(item as Task);
+      updateTask(item as Task).then((value) => {
+        if (value.error) {
+          patchTaskFromList(item as Task);
+        }
+      });
+  }
+
+  const updateItemSubTask = () => {
+    updateSubTask(item as SubTask);
+  }
+
   function onFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
@@ -32,7 +47,9 @@ export const TaskUpdateForm: React.FC<Props> = ({
       return;
     }
 
-    onSubmit();
+    if (item.detail_type === 'task') updateItemTask();
+    else updateItemSubTask();
+
     (document.activeElement as HTMLElement)?.blur();
   }
 
