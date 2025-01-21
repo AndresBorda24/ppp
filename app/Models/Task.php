@@ -5,6 +5,7 @@ use Medoo\Medoo;
 use App\Dto\TaskDto;
 use App\Dto\DetalleDto;
 use App\Dto\TaskFullDto;
+use App\Enums\DetailType;
 
 class Task
 {
@@ -85,14 +86,20 @@ class Task
     }
 
     /**
-     * Elimina un proyecto de a base de datos.
+     * Elimina una tarea de la base de datos.
     */
-    public function remove(string|int $id)
+    public function remove(string|int $id): bool
     {
         $error = null;
         $this->db->action(function() use($id, &$error) {
             try {
                 $this->db->delete(self::TABLE, ["id" => $id]);
+
+                $obs = new Observation($this->db);
+                $obs->removeAllFor(DetailType::TASK, $id);
+
+                $subTask = new Subtask($this->db);
+                $subTask->removeForTask($id);
 
                 $detalle = new Detalle($this->db);
                 $detalle->cleanUp();

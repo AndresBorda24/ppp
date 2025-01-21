@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Medoo\Medoo;
 use App\Dto\CommentDto;
+use App\Enums\DetailType;
 
 class Observation
 {
@@ -116,5 +117,17 @@ class Observation
     {
         $result = $this->db->delete(self::TABLE, $where);
         return ($result?->rowCount() ?? 0) > 0;
+    }
+
+    public function removeAllFor(DetailType $type, int $id): bool
+    {
+        $result = $this->db->delete(self::TABLE, [
+            "AND" => [
+                "obs_type" => $type->value,
+                "obs_id" => $id
+            ]
+        ]);
+
+        return (bool) $result;
     }
 }

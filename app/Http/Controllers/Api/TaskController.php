@@ -53,7 +53,7 @@ class TaskController
 
     public function delete(int $id): Response
     {
-        return new JsonResponse($this->task->remove($id));
+        return new JsonResponse(['status' => $this->task->remove($id)]);
     }
 
     public function patch(Request $request, int $id, DetailRequest $PR): Response
