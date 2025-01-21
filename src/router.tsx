@@ -1,7 +1,6 @@
-import CreateProject, { action as createAction } from './routes/CreateProject.tsx'
-
 import Auth from './routes/Auth.tsx';
 import { AuthMiddleware } from './middleware/AuthMiddleware.tsx';
+import { CreateProjectView } from './routes/create-project/CreateProjectView.tsx';
 import { ErrorPage } from "./routes/Error";
 import { GuestMiddleware } from './middleware/GuestMiddleware.tsx';
 import { IndexPage } from "./routes/index/IndexPage";
@@ -9,6 +8,7 @@ import { LoginPage } from './routes/login/LoginPage.tsx';
 import { ProjectView } from "./routes/project/ProjectView.tsx";
 import Root from "./routes/root";
 import { createBrowserRouter } from "react-router-dom";
+import { createProejctAction } from './routes/create-project/CreateProjectAction.ts';
 import { indexLoader } from "./routes/index/indexLoader";
 import { loginAction } from './routes/login/loginAction.ts';
 import { projectLoader } from "./routes/project/projectLoader.ts";
@@ -33,8 +33,8 @@ export const router = createBrowserRouter([
               },
               {
                 path: '/new-project',
-                action: createAction,
-                element: <CreateProject />
+                action: createProejctAction,
+                element: <CreateProjectView />
               },
               {
                 path: '/p/:slug/ver',

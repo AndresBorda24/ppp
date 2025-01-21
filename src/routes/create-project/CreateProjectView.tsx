@@ -1,19 +1,14 @@
-import View from '../components/view'
-import { ActionFunctionArgs, Form } from 'react-router-dom'
-import { AppInput, AppTextarea, AppLabel } from '../components/forms'
+import { AppInput, AppLabel, AppTextarea } from '../../components/forms'
+
+import { BaseButton } from '../../components/button'
+import { Form } from 'react-router-dom'
+import { MessiTv } from '../../components/MessiTv'
+import { Priority } from '../../types'
+import { SelectPriority } from '../../components/Priority'
+import View from '../../components/view'
 import { useState } from 'react'
-import { BaseButton } from '../components/button'
-import { SelectPriority } from '../components/Priority'
-import { Priority } from '../types'
-import { MessiTv } from '../components/MessiTv'
 
-export async function action({ request }: ActionFunctionArgs) {
-  const formData = await request.formData()
-  console.log({ data: Object.fromEntries(formData) })
-  return null
-}
-
-const CreateProject: React.FC = () => {
+export const CreateProjectView: React.FC = () => {
   const [priority, setPriority] = useState<Priority>('normal')
 
   return (
@@ -53,5 +48,3 @@ const CreateProject: React.FC = () => {
     </View>
   )
 }
-
-export default CreateProject
