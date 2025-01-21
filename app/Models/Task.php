@@ -198,6 +198,34 @@ class Task
         return true;
     }
 
+    /**
+     * Marca una tarea como completada o en proceso, cuando es completada se
+     * marcan también todas sus subtareas.
+     */
+    public function setCompleted(int $id, bool $completed): bool
+    {
+        $error = null;
+        $this->db->action(function() use(&$error, $id, $completed) {
+            try {
+                $details = new Detalle($this->db);
+                $details->patch([
+                    'detail_type' => self::TYPE,
+                    'detail_id'   => $id
+                ], ['status' => $completed ? 'finished' : 'process']);
+
+                if ($completed) {
+                    (new Subtask($this->db))->setCompletedForTask($id);
+                }
+            } catch (\Exception $e) {
+                $error = $e;
+                return false;
+            }
+        });
+        if ($error !== null) throw $error;
+
+        return true;
+    }
+
     // public function getProgress(): int
     // {
     //     try {

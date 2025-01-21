@@ -41,6 +41,7 @@ return function (App $app) {
                 $tk->post("/{projectId:[0-9]+}/create", [TaskController::class, "create"]);
                 $tk->put("/{id:[0-9]+}/update", [TaskController::class, "update"]);
                 $tk->patch("/{id:[0-9]+}/patch", [TaskController::class, "patch"]);
+                $tk->patch("/{id:[0-9]+}/completed/{completed:[0,1]}", [TaskController::class, "setCompleted"]);
                 $tk->delete("/{id:[0-9]+}/delete", [TaskController::class, "delete"]);
             });
 
@@ -50,6 +51,7 @@ return function (App $app) {
                 $st->post("/{id:[0-9]+}/to-task", [SubtaskController::class, "toTask"]);
                 $st->put("/{id:[0-9]+}/update", [SubtaskController::class, "update"]);
                 $st->patch("/{id:[0-9]+}/patch", [SubtaskController::class, "patch"]);
+                $st->patch("/{id:[0-9]+}/completed/{completed:[0,1]}", [SubtaskController::class, "setCompleted"]);
                 $st->delete("/{id:[0-9]+}/delete", [SubtaskController::class, "delete"]);
             });
 

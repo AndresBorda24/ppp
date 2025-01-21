@@ -1,6 +1,7 @@
-import { Icon } from "@iconify-icon/react"
-import { patchTask, patchSubTask } from "../../requests/tasks-requests";
 import { SubTask, Task } from "../../types";
+
+import { Icon } from "@iconify-icon/react"
+import { markAsCompleted } from "../../requests/tasks-requests";
 
 interface Props {
   item: Task|SubTask,
@@ -12,9 +13,14 @@ export const UpdateTaskStateButton: React.FC<Props> = ({ item, onUpdated }) => {
       ? 'process'
       : 'finished';
 
-    (item.detail_type === 'task')
-      ? patchTask({ id: item.id , body: { status: item.status }})
-      : patchSubTask({ id: item.id , body: { status: item.status }});
+    markAsCompleted(item, (item.status === 'finished')).then(success => {
+      if (!success) {
+        item.status = (item.status === 'finished')
+          ? 'process'
+          : 'finished';
+        onUpdated(item);
+      }
+    });
 
     onUpdated(item);
   }

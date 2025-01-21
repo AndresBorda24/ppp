@@ -59,3 +59,16 @@ export async function deleteTaskOrSubTask(item: Task | SubTask) {
 
   return data?.status;
 }
+
+export async function markAsCompleted(
+  item: Task | SubTask,
+  completed: boolean
+) {
+  const { error, data } = await appFetch<{ status: boolean }>("PATCH", {
+    url: `/${item.detail_type === "task" ? "tasks" : "subtasks"}/${
+      item.id
+    }/completed/${completed ? "1" : "0"}`,
+  });
+
+  return error ? false : data?.status;
+}

@@ -1,5 +1,6 @@
-import { create, StateCreator } from "zustand";
+import { StateCreator, create } from "zustand";
 import { SubTask, Task } from "../types";
+
 import { getCurrentDateTime } from "../utils";
 
 interface ModalSlice {
@@ -45,7 +46,8 @@ const createTaskModalSlice: StateCreator<
     pushSubtasks: (subtasks: SubTask[]) => set(() => ({ subtasks })),
     closeModal: () => set(() => ({
         open: false,
-        prevTask: undefined
+        prevTask: undefined,
+        subtasks: []
     })),
     patchTask: (key, value) => set(({ task }) => {
         const newTask = {

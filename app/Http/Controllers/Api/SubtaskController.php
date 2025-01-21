@@ -69,4 +69,12 @@ class SubtaskController
         $subtask = $this->subtask->getOne(["S.id" => $id]);
         return new JsonResponse($subtask);
     }
+
+    public function setCompleted(int $completed, int $id): Response
+    {
+        $isCompleted = ($completed === 1);
+        return new JsonResponse([
+            'status' => $this->subtask->setCompleted($id, $isCompleted)
+        ]);
+    }
 }
