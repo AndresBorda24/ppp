@@ -58,7 +58,7 @@ class SubtaskController
 
     public function delete(int $id): Response
     {
-        return new JsonResponse($this->subtask->remove($id));
+        return new JsonResponse(['status' => $this->subtask->remove($id)]);
     }
 
     public function patch(Request $request, int $id, DetailRequest $PR): Response

@@ -4,6 +4,7 @@ namespace App\Models;
 use App\Dto\DetalleDto;
 use App\Dto\TaskDto;
 use App\Dto\SubtaskFullDto;
+use App\Enums\DetailType;
 use Medoo\Medoo;
 
 class Subtask
@@ -105,6 +106,9 @@ class Subtask
             try {
                 $this->db->delete(self::TABLE, ["id" => $id]);
 
+                $obs = new Observation($this->db);
+                $obs->removeAllFor(DetailType::SUBTASK, $id);
+
                 $detalle = new Detalle($this->db);
                 $detalle->cleanUp();
             } catch(\Exception $e) {
@@ -117,6 +121,16 @@ class Subtask
 
         return true;
     }
+
+    /**
+     * Elimina una sub-tarea relacionadad con una tarea. IMPORTANTE: No elimina
+     * el detalle de la sub-tarea.
+     */
+    public function removeForTask(int $taskId): bool
+    {
+        return (bool) $this->db->delete(self::TABLE, ["task_id" => $taskId]);
+    }
+
     /**
      * Obtiene el listado de todas las subtareas para una tarea en especifico
      * @return array
