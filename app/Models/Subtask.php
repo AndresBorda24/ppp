@@ -233,4 +233,34 @@ class Subtask
 
         return true;
     }
+
+    public function setCompleted(int $id, bool $completed): bool
+    {
+        $details = new Detalle($this->db);
+        $details->patch([
+            'detail_type' => self::TYPE,
+            'detail_id'   => $id
+        ], ['status' => $completed ? 'finished' : 'process']);
+
+        return true;
+    }
+
+    /**
+     * Establece como finalizadas todas las subtareas relacionadas con una
+     * tarea en específico.
+     */
+    public function setCompletedForTask(int $taskId): bool
+    {
+        $details = new Detalle($this->db);
+        $details->patch([
+            "AND" => [
+                'detail_type' => DetailType::SUBTASK,
+                'detail_id' => $this->db->select(self::TABLE, 'id', [
+                    'task_id' => $taskId
+                ])
+            ]
+        ], ['status' => 'finished']);
+
+        return true;
+    }
 }

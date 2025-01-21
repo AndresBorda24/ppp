@@ -64,4 +64,12 @@ class TaskController
         $task = $this->task->getOne(["T.id" => $id]);
         return new JsonResponse($task);
     }
+
+    public function setCompleted(int $completed, int $id): Response
+    {
+        $isCompleted = ($completed === 1);
+        return new JsonResponse([
+            'status' => $this->task->setCompleted($id, $isCompleted)
+        ]);
+    }
 }
