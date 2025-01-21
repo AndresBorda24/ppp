@@ -1,16 +1,27 @@
 import { BaseButton } from "../button";
 import { Task } from "../../types";
 import { TaskModalSection } from "./TaskModalSection";
+import { deleteTaskOrSubTask } from "../../requests/tasks-requests";
+import { toast } from "sonner";
 import { useProjectStore } from "../../stores/Project";
 import { useState } from "react";
 import { useTaskModalStore } from "../../stores/TaskModal";
 
 export const TaskModalManagment: React.FC = () => {
   const [show, setShow] = useState(false);
-  const { removeTask } = useProjectStore()
+  const [removing, setRemoving] = useState(false);
+  const { removeTask } = useProjectStore();
   const { task, prevTask, setPrevTask, openModal, closeModal } = useTaskModalStore();
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
+    if (!task || !task.id) return;
+
+    setRemoving(true);
+    const deleted = await deleteTaskOrSubTask(task);
+    setRemoving(false);
+
+    if (!deleted) return;
+
     if (task.detail_type ==="sub_task") {
       openModal(prevTask);
       setPrevTask(undefined);
@@ -18,6 +29,9 @@ export const TaskModalManagment: React.FC = () => {
       removeTask(task as Task);
       closeModal();
     }
+
+    setShow(false);
+    toast.success("Item eliminado correctamente");
   }
 
   if (!task || !task.id) return;
@@ -31,8 +45,8 @@ export const TaskModalManagment: React.FC = () => {
       }
     >
       <div
-        className={`rounded p-5 grid place-content-center bg-red-50 transition-all duration-300 relative ${
-          show ? "bg-red-100 shadow-md" : ""
+        className={`rounded p-5 grid place-content-center transition-all duration-300 relative ${
+          show ? "bg-red-100 shadow-md" : "bg-red-50"
         }`}
       >
         <div>
@@ -53,6 +67,12 @@ export const TaskModalManagment: React.FC = () => {
             {show ? <BaseButton color="red" onClick={handleDelete}>Eliminar</BaseButton> : null}
           </div>
         </div>
+
+        { removing ? (
+          <div className="absolute inset-0 bg-white/90 grid place-content-center">
+            <span className="font-bold">Eliminando...</span>
+          </div>
+        ) : null }
       </div>
     </TaskModalSection>
   );
