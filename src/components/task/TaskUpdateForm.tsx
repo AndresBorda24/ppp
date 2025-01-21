@@ -12,25 +12,21 @@ interface Props {
   patch: (key: keyof Task, value: unknown) => void;
   item: Task | SubTask;
 }
-export const TaskUpdateForm: React.FC<Props> = ({
-  item,
-  patch,
-  onCancel,
-}) => {
-  const { patchTask: patchTaskFromList } = useProjectStore()
+export const TaskUpdateForm: React.FC<Props> = ({ item, patch, onCancel }) => {
+  const { patchTask: patchTaskFromList } = useProjectStore();
 
   const updateItemTask = () => {
-      patchTaskFromList(item as Task);
-      updateTask(item as Task).then((value) => {
-        if (value.error) {
-          patchTaskFromList(item as Task);
-        }
-      });
-  }
+    patchTaskFromList(item as Task);
+    updateTask(item as Task).then((value) => {
+      if (value.error) {
+        patchTaskFromList(item as Task);
+      }
+    });
+  };
 
   const updateItemSubTask = () => {
     updateSubTask(item as SubTask);
-  }
+  };
 
   function onFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -47,7 +43,7 @@ export const TaskUpdateForm: React.FC<Props> = ({
       return;
     }
 
-    if (item.detail_type === 'task') updateItemTask();
+    if (item.detail_type === "task") updateItemTask();
     else updateItemSubTask();
 
     (document.activeElement as HTMLElement)?.blur();
@@ -75,6 +71,7 @@ export const TaskUpdateForm: React.FC<Props> = ({
       onSubmit={onFormSubmit}
       id="task-form"
       autoComplete="off"
+      tabIndex={1}
       className="group relative focus-within:outline-offset-8 focus-within:outline-dotted focus-within:outline-2 focus-within:rounded-sm focus-within:outline-neutral-300"
     >
       <BasicInput
@@ -97,8 +94,7 @@ export const TaskUpdateForm: React.FC<Props> = ({
       />
 
       <span className="text-neutral-400 font-bold text-[10px] inline-block pl-1">
-        {" "}
-        Prioridad{" "}
+        Prioridad
       </span>
       <SelectPriority
         priority={item.priority}
