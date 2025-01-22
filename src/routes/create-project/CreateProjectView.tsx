@@ -1,50 +1,73 @@
-import { AppInput, AppLabel, AppTextarea } from '../../components/forms'
+import { AppLabel, BasicInput, BasicTextarea } from "../../components/forms";
+import { Form, useActionData, useNavigation } from "react-router-dom";
+import { Priority, RequestFormError } from "../../types";
 
-import { BaseButton } from '../../components/button'
-import { Form } from 'react-router-dom'
-import { MessiTv } from '../../components/MessiTv'
-import { Priority } from '../../types'
-import { SelectPriority } from '../../components/Priority'
-import View from '../../components/view'
-import { useState } from 'react'
+import { BaseButton } from "../../components/button";
+import { Icon } from "@iconify-icon/react/dist/iconify.mjs";
+import { SelectPriority } from "../../components/Priority";
+import { ShowRequestErrors } from "../../components/ShowRequestError";
+import View from "../../components/view";
+import { useState } from "react";
 
 export const CreateProjectView: React.FC = () => {
-  const [priority, setPriority] = useState<Priority>('normal')
+  const { state } = useNavigation();
+  const [priority, setPriority] = useState<Priority>("normal");
+  const requestError = useActionData() as RequestFormError | undefined;
+  const isLoading = state !== "idle";
 
   return (
-    <View title='Crear Un Nuevo Proyecto'>
-      <div className='lg:grid grid-cols-2 max-w-4xl'>
-        <Form method='POST' className='max-w-lg'>
-          <AppLabel className='mb-4'>
-            Nombre del Proyecto:
-            <AppInput
+    <View>
+      <div className="lg:grid max-w-4xl mx-auto place-content-center">
+        <Form
+          method="POST"
+          className="max-w-lg border p-8 rounded-lg w-screen shadow-[rgba(7,_65,_210,_0.1)_0px_9px_30px]"
+        >
+          {requestError ? <ShowRequestErrors errors={requestError} fieldErrors /> : null}
+
+          <AppLabel className="mb-4" htmlFor="title">
+            <BasicInput
               required
-              id='title'
-              name='title'
-              placeholder='Project Planner'
+              autoFocus
+              type="text"
+              name="title"
+              id="create-project-title"
+              readOnly={isLoading}
+              minLength={2}
+              placeholder="Titulo del Proyecto"
+              className="text-xl text-neutral-800 font-bold w-full rounded px-2"
             />
           </AppLabel>
 
-          <AppLabel className='mb-4'>
-            Una breve descripción:
-            <AppTextarea
-              rows={5}
+          <AppLabel className="mb-4" htmlFor="description">
+            <BasicTextarea
               required
-              id='description'
-              name='description'
-              placeholder='Un medio en el que se puedan registras otros proyectos...'
-            ></AppTextarea>
+              readOnly={isLoading}
+              name="description"
+              id="create-project-description"
+              placeholder="Descripción del Proyecto"
+              className="text-base text-neutral-700 w-full mb-1 resize-none min-h-14 px-2 rounded"
+            />
           </AppLabel>
 
+          <input type="hidden" name="priority" value={priority} />
           <AppLabel>Prioridad</AppLabel>
-          <SelectPriority priority={priority} setPriority={setPriority} className='mb-4' />
+          <SelectPriority
+            priority={priority}
+            setPriority={setPriority}
+            className="mb-6"
+          />
 
-          <BaseButton color='tertiary' type='submit'>Guardar</BaseButton>
+          <BaseButton
+            type="submit"
+            color="secondary"
+            disabled={isLoading}
+            className="ml-auto flex items-center gap-2 disabled:opacity-90"
+          >
+            {isLoading ? <Icon icon="svg-spinners:pulse" /> : null}
+            {isLoading ? "Guardando..." : "Guardar"}
+          </BaseButton>
         </Form>
-        <div className='hidden lg:flex'>
-          <MessiTv className='m-auto' />
-        </div>
       </div>
     </View>
-  )
-}
+  );
+};

@@ -1,5 +1,6 @@
+import { BareBasicProject, CommentWithTitle, PaginatedProject, Project, Task } from "../types";
+
 import { appFetch } from "../AppFetch";
-import { CommentWithTitle, Project, Task } from "../types";
 
 export async function updateProjectRequest({
   id,
@@ -22,5 +23,12 @@ export async function findTasksByProjectId(id: number) {
 export async function findCommentsByProjectId(id: number) {
   return appFetch<CommentWithTitle[]>("GET", {
     url: `/projects/${id}/observations`,
+  });
+}
+
+export async function createProject(project: BareBasicProject) {
+  return appFetch<PaginatedProject>("POST", {
+    url: "/projects/store",
+    body: project
   });
 }

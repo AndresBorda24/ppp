@@ -103,3 +103,9 @@ export interface RequestError {
 export interface RequestFormError extends RequestError {
   fields?: { [k: string]: string[] };
 }
+
+export interface BareBasicProject {
+  title: string;
+  description: string;
+  priority: Priority;
+}
