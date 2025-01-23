@@ -1,5 +1,6 @@
 import { AppInput, XInput, XTextarea } from "../../components/forms";
 
+import { DeleteItem } from "../../components/DeleteItem";
 import { SelectDateHelper } from "../../components/SelectDateHelper";
 import { SelectPriority } from "../../components/Priority";
 import { Tabs } from "../../components/project/Tabs";
@@ -72,10 +73,7 @@ export const ProjectView: React.FC = () => {
               onChange={(e) => patchProject("title", e.target.value)}
               onBlur={() => updateProjectRequest({ id, body: { title } })}
               defaultValue={title}
-            >
-              {" "}
-              {title}{" "}
-            </XInput>
+            >{title}</XInput>
 
             <span className="text-neutral-400 font-bold text-[10px] inline-block pl-1">
               Descripción:
@@ -87,10 +85,9 @@ export const ProjectView: React.FC = () => {
               onChange={(e) => patchProject("description", e.target.value)}
               onBlur={() => updateProjectRequest({ id, body: { description } })}
             >
-              {" "}
               <p className="text-neutral-700 whitespace-break-spaces">
                 {description}
-              </p>{" "}
+              </p>
             </XTextarea>
 
             <span className="text-neutral-400 font-bold text-[10px] inline-block pl-1">
@@ -129,10 +126,7 @@ export const ProjectView: React.FC = () => {
                       onClick={() => setStartedAt()}
                       title="Establecer Fecha de Inicio"
                       className="text-[.6rem] px-1.5 py-0.5 rounded-md transition-colors duration-150 hover:bg-neutral-200 hover:shadow-lg"
-                    >
-                      {" "}
-                      ✔{" "}
-                    </button>
+                    >✔</button>
                   </div>
                 )}
               </div>
@@ -155,6 +149,7 @@ export const ProjectView: React.FC = () => {
               </div>
             </div>
           </form>
+          <DeleteItem type="project" itemId={id} className="py-4 mt-4"/>
           {author_name ? (
             <p className="italic text-xs text-neutral-400 pt-5">
               Proyecto Creado Por:&nbsp;
