@@ -66,6 +66,7 @@ export const TaskCreateForm: React.FC<Props> = ({
     <form onSubmit={onFormSubmit} id="task-form" autoComplete="off">
       <BasicInput
         required
+        autoFocus
         type="text"
         id="create-item-title"
         name="item-title"

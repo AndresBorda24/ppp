@@ -2,9 +2,11 @@ import { DeleteItem } from "../DeleteItem";
 import { Task } from "../../types";
 import { TaskModalSection } from "./TaskModalSection";
 import { useProjectStore } from "../../stores/Project";
+import { useRef } from "react";
 import { useTaskModalStore } from "../../stores/TaskModal";
 
 export const TaskModalManagment: React.FC = () => {
+  const infoEl = useRef<HTMLElement>(null);
   const { removeTask } = useProjectStore();
   const { task, prevTask, setPrevTask, openModal, closeModal } = useTaskModalStore();
 
@@ -12,6 +14,7 @@ export const TaskModalManagment: React.FC = () => {
     if (task.detail_type ==="sub_task") {
       openModal(prevTask);
       setPrevTask(undefined);
+      (infoEl.current?.previousElementSibling as HTMLElement).click()
     } else if (task.detail_type === "task") {
       removeTask(task as Task);
       closeModal();
@@ -25,7 +28,7 @@ export const TaskModalManagment: React.FC = () => {
       title="Administración"
       closedByDefault
       topChildren={
-        <span className="text-gray-500 px-2 text-xs">(Eliminar)</span>
+        <span className="text-gray-500 px-2 text-xs" ref={infoEl}>(Eliminar)</span>
       }
     >
       <DeleteItem
