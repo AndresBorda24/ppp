@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
+use App\Dto\UserDto;
 use App\Http\Requests\DetailRequest;
 use App\Http\Requests\ProjectRequest;
 use App\Models\Project;
@@ -59,40 +60,22 @@ class ProjectController
         return new JsonResponse($this->project->getBasic($id));
     }
 
-    public function store(Request $request, DetailRequest $DR): Response
+    public function store(UserDto $user, Request $request, DetailRequest $DR): Response
     {
-        try {
-            $body = $request->getParsedBody();
-            $detail = $DR->create($body);
-        } catch(\App\Http\Requests\FormValidationException $e) {
-            return new JsonResponse([
-                "message" => $e->getMessage(),
-                "fields"  => $e->getInvalidFields()
-            ]);
-        }
+        $body = $request->getParsedBody();
+        $detail = $DR->create($body + [
+            'created_by_id' => $user->id,
+            'delegate_id'   => $user->id
+        ]);
 
-        $detalleDTO = new \App\Dto\DetalleDto(
-            title         : $detail["title"],
-            description   : $detail["description"],
-            status        : $detail["status"],
-            delegate_id   : $detail["delegate_id"],
-            created_by_id : $detail["created_by_id"],
-            priority      : $detail["priority"],
-            created_at    : $detail["created_at"],
-            started_at    : $detail["started_at"],
-            updated_at    : $detail["updated_at"],
-            finished_at   : $detail["finished_at"],
-        );
-
+        $detalleDTO = \App\Dto\DetalleDto::fromArray($detail);
         $projectDTO = new \App\Dto\ProjectDto(
             estimated_time: 'weeks', // Cambiar esto
             slug: $this->project->generateSlug($detalleDTO->title),
             due_date: null
         );
 
-        return new JsonResponse($this->project->getBasic(
-            $this->project->create($projectDTO, $detalleDTO)
-        ));
+        return new JsonResponse($this->project->create($projectDTO, $detalleDTO));
     }
 
     public function update(
@@ -151,7 +134,9 @@ class ProjectController
 
     public function remove(int $id): Response
     {
-        return new JsonResponse($this->project->remove($id));
+        return new JsonResponse([
+            "status" => $this->project->remove($id)
+        ]);
     }
 
     public function find(string $slug): Response

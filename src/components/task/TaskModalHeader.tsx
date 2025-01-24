@@ -28,9 +28,9 @@ export const TaskModalHeader: React.FC = () => {
     if (item.detail_type === "sub_task") return;
 
     patchTaskFromList(task as Task);
-    if (item.status === 'finished') {
-      const newSubTasks = subtasks.map(s => {
-        s.status = 'finished';
+    if (item.status === "finished") {
+      const newSubTasks = subtasks.map((s) => {
+        s.status = "finished";
         return s;
       });
       pushSubtasks(newSubTasks);
@@ -38,12 +38,18 @@ export const TaskModalHeader: React.FC = () => {
   }
 
   return (
-    <header className="p-1 border-neutral-200 border-b flex gap-2 justify-end items-center">
+    <header
+      className={`p-1 border-neutral-200 border-b flex gap-2 justify-end items-center ${
+        task.detail_type === "task" ? "bg-amber-50" : "bg-sky-50"
+      }`}
+    >
       {Boolean(prevTask) ? (
         <button
           onClick={openPrev}
           className="p-2 hover:bg-neutral-200 text-neutral-700 grid place-content-center rounded mr-auto"
-        ><Icon icon="mingcute:left-fill" /></button>
+        >
+          <Icon icon="mingcute:left-fill" />
+        </button>
       ) : null}
       {Boolean(task.id) ? (
         <div className="flex items-center gap-2 flex-grow">

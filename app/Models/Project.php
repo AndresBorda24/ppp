@@ -117,10 +117,7 @@ class Project
         ]);
     }
 
-    /**
-     *  @return ?string El id de la nueva tarea
-    */
-    public function create(ProjectDto $projectData, DetalleDto $detalleData): ?string
+    public function create(ProjectDto $projectData, DetalleDto $detalleData): ?array
     {
         $id = null; $error = null;
         $this->db->action(function() use(&$id, &$error, $projectData, $detalleData)  {
@@ -143,7 +140,7 @@ class Project
         if ($error !== null) throw $error;
         if ($id === null) throw new \Exception("No se pudo crear el proyecto");
 
-        return $id;
+        return $this->getBasic($id);
     }
 
     public function update(
@@ -193,7 +190,6 @@ class Project
         });
 
         if ($error !== null) throw $error;
-
         return true;
     }
 

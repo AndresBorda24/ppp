@@ -56,8 +56,9 @@ export const SelectPriority: React.FC<Props&{ className?: string }> = ({
               type="radio"
               name="priority"
               value={key}
+              id={`priority-${key}`}
               onChange={(e) => setPriority(e.target.value as Priority) }
-              className='absolute inset-0 m-auto invisible'
+              className='absolute inset-0 m-auto invisible h-1 w-1'
             />
           </AppLabel>
         ))

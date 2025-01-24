@@ -98,8 +98,8 @@ class Task
                 $obs = new Observation($this->db);
                 $obs->removeAllFor(DetailType::TASK, $id);
 
-                $subTask = new Subtask($this->db);
-                $subTask->removeForTask($id);
+                // $subTask = new Subtask($this->db);
+                // $subTask->removeForTask($id);
 
                 $detalle = new Detalle($this->db);
                 $detalle->cleanUp();
