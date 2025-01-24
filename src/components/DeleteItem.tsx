@@ -1,6 +1,5 @@
-import { AppInput, BasicInput } from "./forms";
-
 import { BaseButton } from "./button";
+import { BasicInput } from "./forms";
 import { DetailType } from "../types";
 import { Icon } from "@iconify-icon/react/dist/iconify.mjs";
 import { deleteItem } from "../requests/project-request";
@@ -15,14 +14,21 @@ interface Props {
 }
 export const DeleteItem: React.FC<Props> = ({ type, itemId, className = '', onDeleted }) => {
   const [confirm, setConfirm] = useState("");
+  const [deleting, setDeleting] = useState(false);
   const confirmed = confirm.toLowerCase() === "eliminar";
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
-    console.log(confirm);
-    return;
+    setDeleting(true);
     const deleted = await deleteItem(type, itemId);
-    if (deleted) onDeleted && onDeleted();
+    setDeleting(false);
+
+    if (deleted) {
+      onDeleted && onDeleted();
+      setConfirm('');
+      (e.target as HTMLFormElement).reset();
+      toast.success('Item eliminado correctamente!')
+    }
     else toast.error(
       'Ha ocurrido un error al intentar eliminar el item'
     );
@@ -30,7 +36,13 @@ export const DeleteItem: React.FC<Props> = ({ type, itemId, className = '', onDe
 
   return (
     <div className={`${className}`}>
-      <div className="flex gap-3 text-red-900">
+      <div className="flex gap-3 text-red-900 relative">
+        {deleting ? (
+          <div className="absolute inset-0 w-full h-full bg-red-50/85 flex items-center justify-center gap-1 rounded">
+            <Icon icon='svg-spinners:pulse' className="text-xl"/>
+            <span className="italic font-semibold">Eliminando</span>
+          </div>
+        ) : null}
         <Icon
           icon="material-symbols-light:warning-rounded"
           className="text-3xl self-center"

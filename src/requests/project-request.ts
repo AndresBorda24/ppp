@@ -34,7 +34,7 @@ export async function createProject(project: BareBasicProject) {
 }
 
 export async function deleteItem(itemType: DetailType, itemId: number) {
-  const urlType = itemType.replace(/(_|\s)*/, '');
+  const urlType = itemType.replace(/(_|\s)/, '');
   const { error, data } = await appFetch<{ status: boolean }>("DELETE", {
     url: `/${urlType}s/${itemId}/delete`,
   });

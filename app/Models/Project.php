@@ -190,7 +190,6 @@ class Project
         });
 
         if ($error !== null) throw $error;
-
         return true;
     }
 

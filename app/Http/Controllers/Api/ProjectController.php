@@ -134,7 +134,9 @@ class ProjectController
 
     public function remove(int $id): Response
     {
-        return new JsonResponse($this->project->remove($id));
+        return new JsonResponse([
+            "status" => $this->project->remove($id)
+        ]);
     }
 
     public function find(string $slug): Response
