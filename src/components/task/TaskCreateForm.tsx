@@ -5,6 +5,7 @@ import { createSubTask, createTask } from "../../requests/tasks-requests";
 import { BaseButton } from "../button";
 import { SelectPriority } from "../Priority";
 import { useProjectStore } from "../../stores/Project";
+import { useState } from "react";
 import { useTaskModalStore } from "../../stores/TaskModal";
 import { useUserInfo } from "../../hooks/useUserInfo";
 
@@ -18,32 +19,30 @@ export const TaskCreateForm: React.FC<Props> = ({
   patch,
   onCancel,
 }) => {
+  const [saving, setSaving] = useState(false);
   const { id: projectId, addNewTask } = useProjectStore();
   const { openModal } = useTaskModalStore();
   const { user } = useUserInfo();
 
-  const createItemTask = () => {
-    (item as Task).project_id = projectId;
-    createTask(item as Task).then((data) => {
-      if (data.data) {
-        data.data.author_name = user.nombre;
-        addNewTask(data.data);
-        openModal(data.data);
-      }
-    });
-  };
+  const createItem = async () => {
+    item.created_by_id = user.id;
+    const isTask = (item.detail_type === 'task');
+    if (isTask) (item as Task).project_id = projectId;
 
-  const createItemSubTask = () => {
-    createSubTask(item as SubTask).then((data) => {
-      if (data.data) {
-        data.data.author_name = user.nombre;
-        openModal(data.data);
-      }
-    });
+    const newItem = isTask
+      ? await createTask(item as Task)
+      : await createSubTask(item as SubTask);
+
+    if (newItem) {
+      newItem.author_name = user.nombre;
+      openModal(newItem);
+      isTask && addNewTask(newItem as Task);
+    }
   }
 
   function onFormSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (saving) return;
 
     // @ts-ignore
     const titleInput: HTMLInputElement | null =
@@ -57,9 +56,8 @@ export const TaskCreateForm: React.FC<Props> = ({
       return;
     }
 
-    item.created_by_id = user.id;
-    if (item.detail_type === "task") createItemTask();
-    else createItemSubTask();
+    setSaving(true);
+    createItem().finally(() => setSaving(false));
   }
 
   return (
@@ -81,10 +79,7 @@ export const TaskCreateForm: React.FC<Props> = ({
         onChange={(e) => patch("description", e.target.value)}
       />
 
-      <span className="text-neutral-400 font-bold text-[10px] inline-block pl-1">
-        {" "}
-        Prioridad{" "}
-      </span>
+      <span className="text-neutral-400 font-bold text-[10px] inline-block pl-1">Prioridad</span>
       <SelectPriority
         priority={item.priority}
         setPriority={(p) => patch("priority", p)}
@@ -95,14 +90,15 @@ export const TaskCreateForm: React.FC<Props> = ({
           <BaseButton
             color="free"
             type="button"
+            disabled={saving}
             className="bg-neutral-700 text-white hover:bg-neutral-900 transition-colors duration-150 focus:ring-neutral-500"
             onClick={onCancel}
           >
             Cancelar
           </BaseButton>
         ) : null}
-        <BaseButton color="secondary" type="submit">
-          Guardar
+        <BaseButton color="secondary" type="submit" disabled={saving}>
+          { saving ? 'Creando...' : 'Guardar'}
         </BaseButton>
       </div>
     </form>

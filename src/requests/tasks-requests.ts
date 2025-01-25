@@ -31,18 +31,32 @@ export function getSubTasks(task: Task) {
   });
 }
 
-export function createTask(task: Task) {
-  return appFetch<Task>("POST", {
+export async function createTask(task: Task) {
+  const { data, error } = await appFetch<Task>("POST", {
     url: `/tasks/${task.project_id}/create`,
     body: task,
   });
+
+  if (error) {
+    toast.error("Error al crear tarea: " + error.error);
+    return null;
+  }
+
+  return data;
 }
 
-export function createSubTask(subtask: SubTask) {
-  return appFetch<SubTask>("POST", {
+export async function createSubTask(subtask: SubTask) {
+  const { data, error } = await appFetch<SubTask>("POST", {
     url: `/subtasks/${subtask.task_id}/create`,
     body: subtask,
   });
+
+  if (error) {
+    toast.error("Error al crear subtarea: " + error.error);
+    return null;
+  }
+
+  return data;
 }
 
 export async function deleteTaskOrSubTask(item: Task | SubTask) {
