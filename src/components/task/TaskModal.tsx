@@ -1,3 +1,4 @@
+import { ContentWrapper } from "../ContentWrapper";
 import { TaskCreateForm } from "./TaskCreateForm";
 import { TaskModalComments } from "./TaskModalComments";
 import { TaskModalFooter } from "./TaskModalFooter";
@@ -6,6 +7,7 @@ import { TaskModalManagment } from "./TaskModalManagment";
 import { TaskModalMobileComments } from "./TaskModalMobileComments";
 import { TaskModalSubtaskList } from "./TaskModalSubtaskList";
 import { TaskUpdateForm } from "./TaskUpdateForm";
+import { useEffect } from "react";
 import { useTaskModalStore } from "../../stores/TaskModal";
 
 export const TaskModal: React.FC = () => {
@@ -26,10 +28,17 @@ export const TaskModal: React.FC = () => {
     } else closeModal();
   };
 
+  useEffect(() => {
+    (document.activeElement as HTMLElement).blur();
+  }, [open]);
+
   if (!open) return;
 
   return (
-    <div className="fixed top-0 left-0 h-screen w-screen bg-black/50 flex justify-center md:items-center overflow-y-auto z-20">
+    <ContentWrapper
+      onEscape={handleOnCancel}
+      className="fixed top-0 left-0 h-screen w-screen bg-black/50 flex justify-center md:items-center overflow-y-auto z-20"
+    >
       <TaskModalComments />
       <div className="bg-white rounded-md overflow-hidden w-screen h-dvh md:max-h-[90vh] max-w-[450px] flex flex-col shadow">
         <TaskModalHeader />
@@ -49,6 +58,6 @@ export const TaskModal: React.FC = () => {
         </div>
         <TaskModalFooter item={task} />
       </div>
-    </div>
+    </ContentWrapper>
   );
 };
