@@ -1,10 +1,11 @@
-import { useState } from "react";
-import { DetailType, Comment, CommentWithTitle } from "../../types";
-import { Icon } from "@iconify-icon/react/dist/iconify.mjs";
-import { BasicTextarea } from "../forms";
+import { Comment, DetailType } from "../../types";
+
 import { BaseButton } from "../button";
+import { BasicTextarea } from "../forms";
+import { Icon } from "@iconify-icon/react/dist/iconify.mjs";
+import { createComment } from "../../requests/comment-request";
 import { useProjectStore } from "../../stores/Project";
-import { appFetch } from "../../AppFetch";
+import { useState } from "react";
 import { useUserInfo } from "../../hooks/useUserInfo";
 
 interface Props {
@@ -13,12 +14,15 @@ interface Props {
   id: number;
 }
 export const NewComment: React.FC<Props> = ({ type, id, className = "" }) => {
+  const [saving, setSaving] = useState(false);
   const [showForm, setShowForm] = useState(false);
   const { id: projectId, addNewComment } = useProjectStore();
   const { user } = useUserInfo();
 
   async function onSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (saving) return;
+
     const form = e.currentTarget as HTMLFormElement;
     const textarea = form.querySelector("textarea") as HTMLTextAreaElement;
     const comment = textarea.value.trim();
@@ -39,20 +43,13 @@ export const NewComment: React.FC<Props> = ({ type, id, className = "" }) => {
       created_at: "",
     };
 
-    try {
-      const { data: newComment, error } = await appFetch<CommentWithTitle>("POST", {
-        url: "/comments/create",
-        body: data,
-      });
+    setSaving(true);
+    const newComment = await createComment(data);
+    setSaving(false);
 
-      if (error) throw error;
-      if (newComment) {
-        addNewComment(newComment);
-        setShowForm(false);
-      }
-    } catch (error) {
-      console.log(error);
-      /* Do something */
+    if (newComment) {
+      addNewComment(newComment);
+      setShowForm(false);
     }
   }
 
@@ -85,12 +82,11 @@ export const NewComment: React.FC<Props> = ({ type, id, className = "" }) => {
                 size="small"
                 color="red"
                 type="button"
+                disabled={saving}
                 onClick={() => setShowForm(false)}
-              >
-                Cancelar
-              </BaseButton>
-              <BaseButton size="small" type="submit">
-                Comentar
+              >Cancelar</BaseButton>
+              <BaseButton disabled={saving} size="small" type="submit">
+                { saving ? 'Comentando...' : 'Comentar' }
               </BaseButton>
             </div>
           </form>
